@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta size=10>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"> -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#abb187">
+  <link href="<%= BASE_URL %>logo.png" rel="apple-touch-icon" sizes="144x144" />
+  <link rel="icon" href="<%= BASE_URL %>logo.png">
+  <script type="text/javascript" src="/host.js"></script>
+  <script type="text/javascript">
+	const VersionCode = 240500;
+	setTimeout(function () {
+		if(document.querySelector('.box')) {
+			document.querySelector('.box').innerHTML = '<a onclick="javascript:location.reload();">加载失败 点击重试</a>';
+		}
+	}, 30000);
+  </script>
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .box {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .circle {
+      --r1: 154%;
+      --r2: 68.5%;
+      width: 50px;
+      height: 50px;
+	    --b: 8px; 
+      border-radius: 50%;
+  background: conic-gradient(#0000 10%,#94ac01) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+    radial-gradient(farthest-side,#0000 calc(100% - var(--b) - 1px),#000 calc(100% - var(--b)));
+  -webkit-mask-composite: destination-in;
+          mask-composite: intersect;
+  animation:l4 1s infinite steps(10);
+    aspect-ratio: 1;
+    }
+	
+	@keyframes l4 {to{transform: rotate(1turn)}}
+
+
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app">
+    <div class="box">
+      <div class="circle"></div>
+    </div>
+  </div>
+  <script>
+    window.onload = function () {
+      // 阻止双击放大
+      var lastTouchEnd = 0;
+      document.addEventListener("touchstart", function (event) {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      });
+      document.addEventListener(
+        "touchend",
+        function (event) {
+          var now = new Date().getTime();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        false
+      );
+
+      // 阻止双指放大
+      document.addEventListener("gesturestart", function (event) {
+        event.preventDefault();
+      });
+    };
+     document.addEventListener('plusready', function() {
+			plus.navigator.closeSplashscreen();
+            var webview = plus.webview.currentWebview();
+            plus.key.addEventListener('backbutton', function() {
+                webview.canBack(function(e) {
+                    if (e.canBack) {
+                        webview.back();
+                    } else {
+                        //webview.close(); //hide,quit
+                        //plus.runtime.quit();
+                        //首页返回键处理
+                        //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+                        var first = null;
+                        plus.key.addEventListener('backbutton', function() {
+                            //首次按键，提示‘再按一次退出应用’
+                            if (!first) {
+                                first = new Date().getTime();
+                                console.log('再按一次退出应用');
+                                setTimeout(function() {
+                                    first = null;
+                                }, 1000);
+                            } else {
+                                if (new Date().getTime() - first < 1500) {
+                                    plus.runtime.quit();
+                                }
+                            }
+                        }, false);
+                    }
+                })
+            });
+        });
+  </script>
+
+
+</body>
+
+</html>
