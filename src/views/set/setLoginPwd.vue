@@ -1,12 +1,12 @@
 <template>
   <div class="page">
-    <nav-bar title="修改登录密码" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
+    <nav-bar title="修改登录密码" titleColor='#313231' leftIconColor="#313231" class="nav-top"/>
     <div class="part_2"></div>
     <div class="wrap">
-      <van-form ref="rform" class="rform" :show-error-message="false">
+      <van-form ref="rform" class="rform" :show-error-message="true">
 
 		 
-		 <template v-if="regSmsSwitch == 1">
+		 <!-- <template v-if="regSmsSwitch == 1">
 		 <div class="label">手机号</div>
 		 <van-field
 		   v-model="form.phone"
@@ -37,56 +37,73 @@
 		         <div v-show="!show" class="sended">{{count}}s后重新获取</div>                 
 		       </div>
 		     </div>
-		   </template>
+		   </template> -->
 		 
 		 
 		<template v-if="regSmsSwitch == 2"> 
-		<div class="label">原密码</div>
+		<!-- <div class="label">原密码</div> -->
         <van-field
           v-model="form.oldPassword"
-          :label-width="120"
-          label=""
           placeholder="请输入原密码"
-          autosize
-          autocomplete="off"
           :border="false"
-          type="password"
+          :type="showOldPassword ? 'text' : 'password'"
+          :error-message="errors.oldPassword"
+          @focus="clearError('oldPassword')"
         >
+          <template #right-icon>
+            <van-icon 
+              :name="showOldPassword ? 'eye-o' : 'closed-eye'" 
+              @click="showOldPassword = !showOldPassword"
+            />
+          </template>
         </van-field>
 		</template>
         <!-- <div class="d_line"></div> -->
 		
-		<div class="label">新登录密码</div>
+		<!-- <div class="label">新登录密码</div> -->
         <van-field
           v-model="form.newPassword"
-          :label-width="120"
-          label=""
           placeholder="请输入新登录密码"
-          autosize
-          autocomplete="off"
           :border="false"
-          type="password"
+          :type="showNewPassword ? 'text' : 'password'"
+          :error-message="errors.newPassword"
+          @focus="clearError('newPassword')"
         >
+          <template #right-icon>
+            <van-icon 
+              :name="showNewPassword ? 'eye-o' : 'closed-eye'" 
+              @click="showNewPassword = !showNewPassword"
+            />
+          </template>
         </van-field>
         <!-- <div class="d_line"></div> -->
-		<div class="label">确认新登录密码</div>
+		<!-- <div class="label">确认新登录密码</div> -->
         <van-field
           v-model="form.confirmPassword"
-          :label-width="120"
-          label=""
-          placeholder="再次输入新登录密码"
-          autosize
-          autocomplete="off"
+          placeholder="请确认新登录密码"
           :border="false"
-          type="password"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          :error-message="errors.confirmPassword"
+          @focus="clearError('confirmPassword')"
         >
+          <template #right-icon>
+            <van-icon 
+              :name="showConfirmPassword ? 'eye-o' : 'closed-eye'" 
+              @click="showConfirmPassword = !showConfirmPassword"
+            />
+          </template>
         </van-field>
 
-		  
-		<div class="btns df_r">
-		  <van-button
-		    @click="handleSubmit"
-		    >修改</van-button>
+        <van-field
+          v-model="form.idCard"
+          placeholder="请输入本人身份证号码"
+          :border="false"
+          :error-message="errors.idCard"
+          @focus="clearError('idCard')"
+        />
+
+		<div class="btns">
+		  <van-button @click="handleSubmit">修改</van-button>
 		</div>
       </van-form>
 
@@ -112,10 +129,19 @@ export default {
         confirmPassword: "",
         idCard: "",
       },
+      errors: {
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+        idCard: "",
+      },
 	  show: true,
 	  count: '',
 	  timer: null,
-	  regSmsSwitch: 1,
+	  regSmsSwitch: 2, // 1手机号
+      showOldPassword: false,
+      showNewPassword: false,
+      showConfirmPassword: false,
     };
   },
   
@@ -126,22 +152,16 @@ export default {
   methods: {
 	  
 	  getConfig() {
-	    getConfigKey({ key: "registerSwitch" }).then(res => {
-			this.regSmsSwitch = res.data.regSmsSwitch;
-	    });
+	    // getConfigKey({ key: "registerSwitch" }).then(res => {
+		// 	this.regSmsSwitch = res.data.regSmsSwitch;
+	    // });
 	  },
 	  
 	  handleSubmit() {
 		 		
 		 
-		 if (this.form.newPassword.length < 1) {
-		   this.$dialog({ message: '请输入新登录密码', className: 'dialog-error' })
-		   return false;
-		 } 
-		 
-		 if (this.form.confirmPassword.length < 1) {
-		   this.$dialog({ message: '请输入确认登录密码', className: 'dialog-error' })
-		   return false;
+		 if (!this.validateForm()) {
+		   return;
 		 } 		
 		  
 	    updatePwdApi(this.form).then((res) => {
@@ -186,6 +206,44 @@ export default {
 	          }
 	      },
 	  
+	  clearError(field) {
+	    this.errors[field] = "";
+	  },
+	  
+	  validateForm() {
+	    let isValid = true;
+	    this.errors = {
+	      oldPassword: "",
+	      newPassword: "",
+	      confirmPassword: "",
+	      idCard: "",
+	    };
+
+	    if (this.regSmsSwitch == 2 && !this.form.oldPassword) {
+	      this.errors.oldPassword = "请输入原密码";
+	      isValid = false;
+	    }
+
+	    if (!this.form.newPassword) {
+	      this.errors.newPassword = "请输入新登录密码";
+	      isValid = false;
+	    }
+
+	    if (!this.form.confirmPassword) {
+	      this.errors.confirmPassword = "请确认新登录密码";
+	      isValid = false;
+	    } else if (this.form.confirmPassword !== this.form.newPassword) {
+	      this.errors.confirmPassword = "两次输入的密码不一致";
+	      isValid = false;
+	    }
+
+	    if (!this.form.idCard) {
+	      this.errors.idCard = "请输入本人身份证号码";
+	      isValid = false;
+	    }
+
+	    return isValid;
+	  },
   },
   
 };
@@ -193,230 +251,92 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-
-  position: relative;
-  text-align: center;
-  width: 100%;
-  height: 168px;
-  background-image: url('@/assets/photo/top2.webp');
-  //background-color: #a9ae8a;
-  background-size: 100% 100%;
+  min-height: 100vh;
+  background: #F8F8F8;
+//   background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+  .part_2 {
+	width: 100%;
+	height: 165px;
+	background: #FFFFFF;
+	background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+  }
 
 
   .wrap {
-    position: relative;
-    top: 78px;
-    left: 0;
-    width: calc(100% - 40px);
-	margin: 0 auto;	
-	text-align: left;
-
+    padding: 16px;
+	background: #FFFFFF6B;
+	margin: 0 12px;
+	margin-top: -90px;
+	border-radius: 8px;
 
     .rform {
-		background: #fff;
-		padding: 15px 20px 200px;
-		border-radius: 5px;
+    //   background: #FFFFFF6B;
+	//   border-radius: 8px;
+    //   padding: 0;
 
-      .d_line {
-        height: 10px;
+      .van-field {
+        height: 44px;
+        background: #FFFFFF;
+        border-radius: 4px;
+        margin-bottom: 24px;
+        padding: 0 16px;
+        border: none;
+        display: flex;
+        align-items: center;
 
+        &::deep(.van-field__control) {
+          height: 44px;
+          line-height: 44px;
+          font-size: 15px;
+          color: #333333;
+        }
+
+        &::deep(.van-field__right-icon) {
+          height: 44px;
+          line-height: 44px;
+          display: flex;
+          align-items: center;
+          color: #999999;
+          font-size: 16px;
+          padding-left: 12px;
+        }
+
+        &::deep(.van-field__placeholder) {
+          color: #999999;
+        }
+
+        &::deep(.van-field__body) {
+          height: 44px;
+          display: flex;
+          align-items: center;
+        }
+
+        &::deep(.van-field__error-message) {
+          color: #ee0a24;
+          font-size: 12px;
+          margin-top: 4px;
+        }
       }
-	  
-	  .label {
-	    width: 130px;
-	    font-size: 15px;
-	    color: #A7AF78;
-	    margin:20px 0 5px 0;
-	  }
-	  
-	  
-	  
-	  .send_email {
-	    align-items: center;
-	    .e_code {
-	      margin-left: 10px;
-	      width: 105px;
-	      .van-button {
-	        height: 40px;
-	        background: linear-gradient(180deg, #5db1ff 0%, #0070d9 100%);
-	        /* border: 1px solid $base_border_color;*/
-	      }
-	    }
-	    .van-count-down {
-	      color: $font_color_white;
-	      font-size: 13px;
-	    }
-	   .capcat_code {
-	      position: relative;
-	      right: 0px;
-	  	width: 140px;
-	  	height: 60px;
-	  	display: inline-block;
-	  	margin-left: 2px;
-	  	img {height: 60px;width:130px;}
-	    }
-	    .phone_code {
-	  	position: relative;
-	      width: 140px;
-	      right: 0px;
-	  	display: inline-block;
-	  		.send {
-				font-size: 16px;
-				font-weight: 500;
-				line-height: 22.4px;
-				text-align: right;
-				color:#A7AF78;
-	  		}
-	  		.sended {
-	  			color:#999;
-	  		}
-	    }
-	  }
-	  
-		
-		.title {
-			width: 100%;
-			height: 22px;
 
-			align-items: center;
-			margin: 10px 0 30px 0;
-			margin-left: -20px;
-			position: relative;
+      .btns {
+        margin-top: 32px;
+        
+        .van-button {
+          width: 100%;
+          height: 44px;
+          background: #4B594A;
+          border: none;
+          border-radius: 22px;  // 全圆角
+          color: #FFFFFF;
+          font-size: 16px;
+          font-weight: 500;
 
-			
-			.hh {
-				padding: 0 0 20px 28px;
-				height: 24px;
-				
-				font-weight: 600;
-				font-size: 18px;
-				line-height: 22px;
-				display: inline-block;
-				color: #3F3D38;
-			}
-			
-			.tp {
-				position: absolute;
-				display: block;
-				width: 5px;
-				height: 22px;
-				left: 0;
-				top: 0;
-				//background: linear-gradient(180deg, #EE6863 0%, #D11A2D 100%);
-				//opacity: 0.75;
-			}
-
-		}
-		
-		.van-cell {
-		    font-size: 16px;
-		    padding: 0;
-		    background-color: transparent;
-		    /*border-bottom: 1px solid $border_color_g;*/
-			border-bottom: 1px solid #F8EBE6;
-			height:50px;
-		
-		  }
-		  .van-field__body {
-		    height: 60px;
-		  }
-		  input.van-field__control {
-		    color: $font_color;
-		    height: 60px;
-		    font-size: 16px;
-		  }
-		  input.van-field__control::-webkit-input-placeholder {
-		    //color: $font_color2 !important;
-		  }
-		  .van-checkbox__label {
-		    color: $font_color;
-		    font-size: 15px;
-		  }
-		
-		::v-deep input.van-field__control {
-		      color: $font_color;
-		      height: 100%;
-		      font-size: 16px;
-		    }
-		::v-deep .tips {
-		  .van-radio__label {
-		    color: $font_color2;
-		    font-size:14px
-		  }
-		}
-		::v-deep .van-button {
-		  width: 100%;
-		  height: 48px;
-		  padding: 0;
-		  margin: 20px 0;
-		  border-radius: 5px;
-		  font-size: 15px;
-		  display:block;
-		}
-		::v-deep .btn2 .van-button {
-		  width: calc(630px / 2);
-		  height: 48px;
-		  padding: 0;
-		  border: none;
-		  border-radius: 5px;
-		  font-size: 15px;
-		}
-		::v-deep .van-button__content{
-		  font-size:18px;
-		}
-	    
-	  
-	  
+          &:active {
+            opacity: 0.9;
+          }
+        }
+      }
     }
-    .btns {
-      margin-top: 20px;
-      justify-content: center;
-    }
-  }
-}
-::v-deep .van-form {
-  .van-cell {
-    font-size: 14px;
-    padding: 0;
-    border-bottom: 1px solid $base_border_color;
-    height: halfSize(110px);
-    margin-bottom: 10px;
-  }
-  .van-field__body {
-    height: halfSize(110px);
-  }
-  .van-field__label {
-    color: $font_color_dark;
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
-    font-weight: bold;
-  }
-  input.van-field__control {
-    color: $font_color_dark;
-    height: 100%;
-    padding: 0 15px;
-  }
-  input.van-field__control::-webkit-input-placeholder {
-    //color: #606060 !important;
-  }
-  .van-checkbox__label {
-    color: $font_color_dark;
-  }
-}
-::v-deep .btns {
-  .van-button {
-    width: 95%;
-    height: 40px;
-    letter-spacing: 1px;
-    padding: 0;
-    //border: none;
-    font-size: 14px;
-    //color: #fff !important;
-	
-			background: rgba(157, 164, 112, 0.12);
-			border: 1.5px solid #AAB086;
-			color: #A7AF78;
   }
 }
 </style>
