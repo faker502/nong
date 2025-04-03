@@ -261,6 +261,16 @@ export default {
 	background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
   }
 
+	::v-deep .van-icon:before {
+      background: #fff!important;
+      border-radius: 50%;
+      // padding: 2px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
   .wrap {
     padding: 16px;

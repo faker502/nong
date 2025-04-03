@@ -1,115 +1,98 @@
 <template>
   <div class="page">
-    <nav-bar title="修改支付密码" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
-    <div class="part_1"></div>
-    <div class="part_2">
-      <van-form ref="form" class="pt30 tx-form">
-        <div class="tx-form-param">
-			
-			<template v-if="regSmsSwitch == 1">
-			<div class="label">手机号</div>
-			<van-field
-			  v-model="form.phone"
-			  :label-width="120"
-			  label=""
-			  placeholder="请输入手机号"
-			  autosize
-			  autocomplete="off"
-			  :border="false"
-			  type="number"
-			>
-			</van-field>
-			</template>
-			
-			
-			<template v-if="regSmsSwitch == 1">
-				<div class="label">短信验证码</div>
-			    <div class="send_email df_r" >
-			      <van-field
-			        v-model="form.phoneCode"
-			        placeholder="请输入短信验证码"                   
-			        autocomplete="off"
-			        :border="false"
-			      >
-			      </van-field>
-			      <div class="phone_code df_r ">
-			        <div v-show="show" class="send" @click="setPhoneCode">获取验证码</div>                 
-			        <div v-show="!show" class="sended">{{count}}s后重新获取</div>                 
-			      </div>
-			    </div>
-			  </template>
-			
-			<template v-if="regSmsSwitch == 2"> 
-			<div>
-			  <div style="margin: 30px 0px 15px;font-size:15px;color:#3F3D38;">输入原支付密码</div>
-			  <div>
-			    <van-cell-group style="height: 50px;margin-top: 14px;">
-			      <van-password-input height="90%" :value="form.oldPayPwd" :focused="showKeyboard0" :length="6" :gutter="10"
-			        @focus="showKeyboard0 = true" @blur="handlePassword0" />
-			    </van-cell-group>
-			    <van-number-keyboard v-model="form.oldPayPwd" :show="showKeyboard0" @blur="handlePassword0" />
-			  </div>
-			</div>
-			 </template>
-			
-          <div>
-            <div style="margin: 15px 0px 15px;font-size:15px;color:#3F3D38;">输入新支付密码</div>
-            <div>
-              <van-cell-group style="height: 50px;margin-top: 14px;">
-                <van-password-input height="90%" :value="form.payPwd" :focused="showKeyboard" :length="6" :gutter="10"
-                  @focus="showKeyboard = true" @blur="handlePassword" />
-              </van-cell-group>
-              <van-number-keyboard v-model="form.payPwd" :show="showKeyboard" @blur="handlePassword" />
-            </div>
-          </div>
-		  
-          <div>
-            <div style="margin: 15px 0px;font-size:15px;color:#3F3D38;">再次输入新支付密码</div>
-            <div>
-              <van-cell-group style="height: 50px;margin-top: 14px;">
-                <van-password-input height="90%" :value="form.payPwd2" :focused="showKeyboard2" :length="6" :gutter="10"
-                  @focus="showKeyboard2 = true" @blur="handlePassword2" />
-              </van-cell-group>
-              <van-number-keyboard v-model="form.payPwd2" :show="showKeyboard2" @blur="handlePassword2" />
-            </div>
-          </div>
-        </div>
-		
+    <nav-bar title="修改支付密码" titleColor='#313231' leftIconColor="#313231" class="nav-top"/>
+    <div class="part_2"></div>
+    <div class="wrap">
+      <van-form ref="form" class="rform" :show-error-message="true">
+        <template v-if="regSmsSwitch == 2">
+          <van-field
+            v-model="form.oldPayPwd"
+            placeholder="请输入原支付密码"
+            :border="false"
+            :type="showPassword.oldPayPwd ? 'text' : 'password'"
+            readonly
+            :error-message="errors.oldPayPwd"
+            @click="showKeyboard0 = true"
+            @focus="clearError('oldPayPwd')"
+          >
+            <template #right-icon>
+              <van-icon :name="showPassword.oldPayPwd ? 'eye-o' : 'closed-eye'" @click.stop="togglePassword('oldPayPwd')" />
+            </template>
+          </van-field>
+        </template>
 
-		<div>
-		    <div style="margin: 15px 0px;font-size:15px;color:#3F3D38;">输入本人身份证号码</div>
-		    <div>
-		      <van-cell-group >
-		        <van-field
-		          v-model="form.idCard"
-		          placeholder="输入本人身份证号码"
-		          autosize
-		          autocomplete="off"
-		          :border="false"
-		          type="text"
-		        ></van-field>
-		      </van-cell-group>
-		    </div>
-		</div>
-		
-		
+        <van-field
+          v-model="form.payPwd"
+          placeholder="请输入新支付密码"
+          :border="false"
+          :type="showPassword.payPwd ? 'text' : 'password'"
+          readonly
+          :error-message="errors.payPwd"
+          @click="showKeyboard = true"
+          @focus="clearError('payPwd')"
+        >
+          <template #right-icon>
+            <van-icon :name="showPassword.payPwd ? 'eye-o' : 'closed-eye'" @click.stop="togglePassword('payPwd')" />
+          </template>
+        </van-field>
+
+        <van-field
+          v-model="form.payPwd2"
+          placeholder="请再次输入新支付密码"
+          :border="false"
+          :type="showPassword.payPwd2 ? 'text' : 'password'"
+          readonly
+          :error-message="errors.payPwd2"
+          @click="showKeyboard2 = true"
+          @focus="clearError('payPwd2')"
+        >
+          <template #right-icon>
+            <van-icon :name="showPassword.payPwd2 ? 'eye-o' : 'closed-eye'" @click.stop="togglePassword('payPwd2')" />
+          </template>
+        </van-field>
+
+        <van-field
+          v-model="form.idCard"
+          placeholder="请输入本人身份证号码"
+          :border="false"
+          :error-message="errors.idCard"
+          @focus="clearError('idCard')"
+        />
+
+        <div class="btns">
+          <van-button @click="commitPassword">修改</van-button>
+        </div>
       </van-form>
-      <div class="tx-button">
-        <div class="button" @click="commitPassword">修改</div>
-      </div>
+
+      <van-number-keyboard
+        v-model="form.oldPayPwd"
+        :show="showKeyboard0"
+        @blur="handlePassword0"
+        maxlength="6"
+      />
+      <van-number-keyboard
+        v-model="form.payPwd"
+        :show="showKeyboard"
+        @blur="handlePassword"
+        maxlength="6"
+      />
+      <van-number-keyboard
+        v-model="form.payPwd2"
+        :show="showKeyboard2"
+        @blur="handlePassword2"
+        maxlength="6"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { updatePayPwdApi,setPhoneCodeApi } from "@/api/member";
-import loading from "@/components/Loading.vue";
+import { mapGetters } from "vuex";
+import { updatePayPwdApi } from "@/api/member";
 import { getConfigKey } from "@/api/index";
 
 export default {
   name: "setPayPassword",
-  inject: ["reload"],
   data() {
     return {
       form: {
@@ -118,304 +101,203 @@ export default {
         payPwd2: "",
         idCard: ""
       },
-      isShow: false,
+      errors: {
+        oldPayPwd: "",
+        payPwd: "",
+        payPwd2: "",
+        idCard: ""
+      },
       showKeyboard0: false,
       showKeyboard: false,
       showKeyboard2: false,
-      payPwd: undefined,
-      loading: false,
-      payPassword: '',
-	  regSmsSwitch: 1,
-	  show: true,
-	  count: '',
-	  timer: null,
+      regSmsSwitch: 2,
+      showPassword: {
+        oldPayPwd: false,
+        payPwd: false,
+        payPwd2: false
+      }
     };
   },
-  computed: {
-    ...mapGetters(["userInfo"]),
-  },
-  watch: {},
+
   mounted() {
     this.getConfig();
   },
+
   methods: {
-	  
-	  getConfig() {
-	    getConfigKey({ key: "registerSwitch" }).then(res => {
-	  			this.regSmsSwitch = res.data.regSmsSwitch;
-	    });
-	  },
-	handlePassword0(){
-	  this.showKeyboard0 = false;
-	},
-    handlePassword(){
+    getConfig() {
+      getConfigKey({ key: "registerSwitch" }).then(res => {
+        this.regSmsSwitch = res.data.regSmsSwitch;
+      });
+    },
+
+    clearError(field) {
+      this.errors[field] = "";
+    },
+
+    handlePassword0() {
+      this.showKeyboard0 = false;
+      this.clearError('oldPayPwd');
+    },
+
+    handlePassword() {
       this.showKeyboard = false;
-      if (this.form.payPwd.length != 6) {
-        this.$dialog({ message: '请输入6位新支付密码！', className: 'dialog-error' })
-        return false;
-      }
+      this.clearError('payPwd');
     },
-    handlePassword2(){
+
+    handlePassword2() {
       this.showKeyboard2 = false;
-      if (this.form.payPwd2.length != 6) {
-        this.$dialog({ message: '请输入6位确认支付密码！', className: 'dialog-error' })
-        return false;
-      }
+      this.clearError('payPwd2');
     },
-	
-	setPhoneCode() {
-	  setPhoneCodeApi({phone:this.form.phone}).then((res) => {
-		  this.$dialog({ message: res.msg, className: 'dialog-error' })
-		  if (res.code != 200) {
-		  } else {
-			  this.ccc();
-		  }		
-	  });
-	},
-	
-	ccc(){
-	        const TIME_COUNT = 60;
-	        if (!this.timer) {
-	            this.count = TIME_COUNT;
-	            this.show = false;
-	            this.timer = setInterval(() => {
-	                if (this.count > 0 && this.count <= TIME_COUNT) {
-	                    this.count--;
-	                } else {
-	                    this.show = true;
-	                    clearInterval(this.timer);
-	                    this.timer = null;
-	                }
-	            }, 1000)
-	        }
-	    },
-	
-    commitPassword() { 
-      if (this.form.payPwd.length == 6 && this.form.payPwd2.length == 6) {
-        if (this.form.payPwd != this.form.payPwd2) {
-          this.$dialog({ message: '新支付密码和确认支付密码不一致，请重新输入！', className: 'dialog-error' })
-          return false;
-        }
-		if (this.form.idCard.length < 5) {
-		  this.$dialog({ message: '请输入本人身份证号码！', className: 'dialog-error' })
-		  return false;
-		}
-        this.$refs.form.validate().then(() => {
-          console.log(this.form);
-          updatePayPwdApi(this.form).then((res) => {
-            if (res.code != 200) {
-              this.$dialog({ message: res.msg, className: 'dialog-error' })
-              return false;
-            } else { 
-              this.$dialog({ message: res.msg, className: 'dialog-error' })
-              this.form.idCard = this.form.oldPayPwd = this.form.payPwd = this.form.payPwd2 = this.form.idCard = '';
-              return false;
-            }
-          }); 
-        }).catch((err) => {
-          console.log(err);
-        });
-      } else {
-        this.$dialog({ message: '请输入6位支付密码', className: 'dialog-error' })
-        return false;
+
+    togglePassword(field) {
+      this.showPassword[field] = !this.showPassword[field];
+    },
+
+    validateForm() {
+      let isValid = true;
+      this.errors = {
+        oldPayPwd: "",
+        payPwd: "",
+        payPwd2: "",
+        idCard: ""
+      };
+
+      if (this.regSmsSwitch == 2 && (!this.form.oldPayPwd || this.form.oldPayPwd.length !== 6)) {
+        this.errors.oldPayPwd = "请输入6位原支付密码";
+        isValid = false;
       }
+
+      if (!this.form.payPwd || this.form.payPwd.length !== 6) {
+        this.errors.payPwd = "请输入6位新支付密码";
+        isValid = false;
+      }
+
+      if (!this.form.payPwd2 || this.form.payPwd2.length !== 6) {
+        this.errors.payPwd2 = "请输入6位确认支付密码";
+        isValid = false;
+      } else if (this.form.payPwd2 !== this.form.payPwd) {
+        this.errors.payPwd2 = "两次输入的密码不一致";
+        isValid = false;
+      }
+
+      if (!this.form.idCard) {
+        this.errors.idCard = "请输入本人身份证号码";
+        isValid = false;
+      }
+
+      return isValid;
+    },
+
+    commitPassword() {
+      if (!this.validateForm()) {
+        return;
+      }
+
+      updatePayPwdApi(this.form).then((res) => {
+        this.$dialog.alert({ message: res.msg });
+        if (res.code == 200) {
+          this.form.oldPayPwd = '';
+          this.form.payPwd = '';
+          this.form.payPwd2 = '';
+          this.form.idCard = '';
+        }
+      });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.van-hairline--top-bottom::after,
-.van-hairline-unset--top-bottom::after {
-  border-width: 0 0;
-}
-
-.van-password-input {
-  margin: 0;
-}
-
-.van-password-input__security li {
-  height: 95%;
-  //background-color: #F1F3F4;
-  border: 1px solid #EDEDF1;
-  border-radius: 5px;
-}
-
-
-		
-::v-deep .van-cell {
-	font-size: 14px;
-	padding: 0;
-	border-bottom: 1px solid #F8EBE6;
-	height: 50px;
-	margin-bottom: 10px;
-  }
-  ::v-deep .van-field__body {
-	height: 50px;
-  }
-  ::v-deep .van-field__control {
-	height: 50px;
-	padding: 0 15px;
-	line-height: 50px;
-  }
-
-
 .page {
-  overflow-y: auto;
-  
-    position: relative;
-    text-align: center;
-    width: 100%;
-    background: url('@/assets/photo/top2.webp') no-repeat top left;
-    //background-color: #a9ae8a;
-    background-size: 100% 168px;
-
-
+  min-height: 100vh;
+  background: #F8F8F8;
 
   .part_2 {
-    width: 95%;
-    background-color: #fff;
-	margin: 0 auto;
-	margin-top: 80px;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	text-align: left;
-    .pt30 {
-      padding-top: 30px;
-    }
+    width: 100%;
+    height: 165px;
+    background: #FFFFFF;
+    background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+  }
 
-    .tx-form {
-      width: 85%;
-      margin: 0px auto;
-	  
-	  
+  ::v-deep .van-icon:before {
+    background: #fff!important;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      .tx-form-box {
-        font-size: 18px;
-        font-weight: 600;
-        padding: 20px 0;
-        color: #4D4D4D;
+  .wrap {
+    padding: 16px;
+    background: #FFFFFF6B;
+    margin: 0 12px;
+    margin-top: -90px;
+    border-radius: 8px;
 
-        span {
-          display: inline-block;
-          width: 50%;
+    .rform {
+      .van-field {
+        height: 44px;
+        background: #FFFFFF;
+        border-radius: 4px;
+        margin-bottom: 24px;
+        padding: 0 16px;
+        border: none;
+        display: flex;
+        align-items: center;
+
+        &::deep(.van-field__control) {
+          height: 44px;
+          line-height: 44px;
+          font-size: 15px;
+          color: #333333;
         }
 
-        span:nth-child(2) {
-          text-align: right;
+        &::deep(.van-field__right-icon) {
+          height: 44px;
+          line-height: 44px;
+          display: flex;
+          align-items: center;
+          color: #999999;
+          font-size: 16px;
+          padding-left: 12px;
+        }
+
+        &::deep(.van-field__placeholder) {
+          color: #999999;
+        }
+
+        &::deep(.van-field__body) {
+          height: 44px;
+          display: flex;
+          align-items: center;
+        }
+
+        &::deep(.van-field__error-message) {
+          color: #ee0a24;
+          font-size: 12px;
+          margin-top: 4px;
         }
       }
 
-      .tx-form-param {
-        .title {
-          font-size: 18px;
-          font-weight: 600;
-          margin: 20px 0;
-          color: #4D4D4D;
+      .btns {
+        margin-top: 32px;
+        
+        .van-button {
+          width: 100%;
+          height: 44px;
+          background: #4B594A;
+          border: none;
+          border-radius: 22px;
+          color: #FFFFFF;
+          font-size: 16px;
+          font-weight: 500;
+
+          &:active {
+            opacity: 0.9;
+          }
         }
-		
-.label {
-	    width: 130px;
-	    font-size: 15px;
-	    color: rgb(63, 61, 56);
-	    margin:20px 0 5px 0;
-	  }
-	  
-	  
-	  
-	  .send_email {
-	    align-items: center;
-	    .e_code {
-	      margin-left: 10px;
-	      width: 105px;
-	      .van-button {
-	        height: 40px;
-	        background: linear-gradient(180deg, #5db1ff 0%, #0070d9 100%);
-	        /* border: 1px solid $base_border_color;*/
-	      }
-	    }
-	    .van-count-down {
-	      color: $font_color_white;
-	      font-size: 13px;
-	    }
-	   .capcat_code {
-	      position: relative;
-	      right: 0px;
-	  	width: 140px;
-	  	height: 60px;
-	  	display: inline-block;
-	  	margin-left: 2px;
-	  	img {height: 60px;width:130px;}
-	    }
-	    .phone_code {
-	  	position: relative;
-	      width: 140px;
-	      right: 0px;
-	  	display: inline-block;
-	  		.send {
-				font-size: 16px;
-				font-weight: 500;
-				line-height: 22.4px;
-				text-align: right;
-				color:#A7AF78;
-	  		}
-	  		.sended {
-	  			color:#999;
-	  		}
-	    }
-	  }
-	  
-		
-		
-      }
-    }
-
-    .tx-button {
-      width: 100%;
-      text-align: center;
-      margin: 25px auto 0;
-	  padding-bottom: 200px;
-
-      .button {
-        width: 76%;
-        margin: 0 auto;
-        //background: linear-gradient(180deg, #dbe1ba 0%, #a8ad89 100%);
-        border-radius: 5px;
-        padding: 15px;
-        font-size: 16px;
-        //color: #fff;
-		font-weight: 400;
-		
-		color: #A7AF78;
-				background: rgba(157, 164, 112, 0.12);
-				border: 1.5px solid #AAB086;
-      }
-
-      .record {
-        width: 60%;
-        margin: 0 auto;
-        font-size: 16px;
-        color: #2F6DB3;
-        font-weight: 600;
-        padding: 18px;
-      }
-    }
-
-    .role {
-      padding: 0px 28px 20px;
-      margin-bottom: 20px;
-
-      .role-title {
-        margin: 20px 0;
-        font-weight: bold;
-        font-size: 18px;
-      }
-
-      .rules_content {
-        font-family: 'PingFang SC';
-        font-size: 14px;
-        line-height: 32px;
-        color: #969BA0;
       }
     }
   }
