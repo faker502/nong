@@ -1,69 +1,50 @@
 <template>
   <div class="test-page">
-    <div class="top">
-      <div class="top-head">
-        
-      <nav-bar title="收款账户" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>		
-		
+    <nav-bar title="收款账号" titleColor='#313231' leftIconColor="#313231" class="nav-top"/>
+    <div class="part_2"></div>
+    <div class="wrap">
+      <div class="empty-state" v-if="list.length == 0">
+        <div class="empty-icon">
+          <img :src="require('@/assets/img/no-record_card.png')" alt="暂无记录">
+        </div>
+        <!-- <p class="empty-text">暂无任何收款方式</p> -->
+        <van-button @click="$router.push('/card/bind')">添加收款账号</van-button>
+      </div>
+
+      <div class="card-list" v-else>
+        <div class="card-item" v-for="(item, key) in list" :key="key" @click="tolink(item.type)">
+          <div class="card-info">
+            <div class="card-icon">
+              <svg-icon iconClass="alipay" v-if="item.type == 1" :size="28"/>
+              <svg-icon iconClass="unionPay" v-else-if="item.type == 2" :size="28"/>
+              <svg-icon iconClass="address" v-else :size="28"/>
+            </div>
+            <div class="card-title">
+              {{ item.type == 1 ? '支付宝账户' : item.bankName }}
+              <div v-if="item.type == 2" class="bank-branch">{{ getBankBranch(item) }}</div>
+            </div>
+            <div class="card-name">{{ item.name }}</div>
+            <div class="card-number">{{ formatCardNumber(item.number, item.type) }}</div>
+          </div>
+          <div class="edit-btn">
+            编辑 <van-icon name="arrow" />
+          </div>
+        </div>
+
+        <van-button v-if="isAdd" @click="$router.push('/card/bind')">添加收款账号</van-button>
       </div>
     </div>
-    <div class="page1">
-      <van-cell-group class="peration-item" v-if="list.length == 0" style="padding-top: 20px;">
-        <template>
-          <img :src="require('@/assets/img/no-record.png')" width="50%">
-        </template>
-        <div style="margin-top:30px;font-size:16px;color: #BDC3CD;">暂无任何收款方式</div>
-		<div style="margin-top:40px;font-size:16px;">
-			<van-button @click="$router.push('/card/bind')" type="info">添加收款方式</van-button>
-		</div>
-      </van-cell-group>
-	  
-	  
 
-      <van-cell-group inset class="peration-item" style="padding-top: 20px" v-else>
-
-        <van-cell class="van-content-cell" is-link v-for="(item, key) in list" :key="key" @click="tolink(item.type)">
-          <template #title>
-            <div class="custom-title">{{ item.type == 1 ? '支付宝账户' : item.bankName }}
-			<span>{{ item.name }}</span>
-			</div>
-            <div class="custom-account">{{ item.number }}</div>
-          </template>
-          <template #icon>
-            <!-- <van-icon class="custom-icon" name="alipay" size="2em" color="#0F6FD6"  /> -->
-            <svg-icon iconClass="alipay" v-if="item.type == 1" :size="40" style="padding-top: 6px;"/>
-            <svg-icon iconClass="unionPay" v-else-if="item.type == 2" :size="40" style="padding-top: 6px;"/>
-            <svg-icon iconClass="address" v-else :size="40" style="padding-top: 6px;"/>
-          </template>
-          <template #right-icon>
-            <van-icon class="custom-right" name="arrow" size="18px" color="#BFBFBF" />
-          </template>
-		  
-        </van-cell>
-		
-		<div style="margin-top:40px;font-size:16px;" v-if="isAdd">
-			<van-button @click="$router.push('/card/bind')" type="info">添加收款方式</van-button>
-		</div>
-
-      </van-cell-group>
-	  
-	  <div class="btns df_r">
-	      <div class="" style="font-size:18px;color:red;" @click="$router.push('/online')">在线客服</div>
-	  </div>
-
-      <!-- #icon-unionPay -->
-<!--      <div class="button-row" v-if="isAdd">
-        <div class="button" @click="$router.push('/card/bind')">
-          <van-icon name="add-o" />
-          <span>添加收款方式</span>
-        </div>
-      </div> -->
-	  
-	  
-	  
+    <div class="customer-service" @click="$router.push('/online')">
+      <p class="service-text">
+        账号遇到问题？
+        <span class="highlight">人工客服</span>
+        解决
+      </p>
     </div>
   </div>
 </template>
+
 <script>
 import { mapActions } from "vuex";
 import { getUserApi, bankListApi } from "@/api/member";
@@ -75,7 +56,21 @@ export default {
       list: [],
       isAlipay: 'yes',
       isBank: 'yes',
-      isAdd: false
+      isAdd: false,
+      tabs: [
+        { title: "银行卡", id: 1, icon: 'bankpay' },
+        { title: "支付宝", id: 0, icon: 'alipay' }
+      ],
+      form: {
+        bankNumber: "",
+        bankUserName: "",
+        bankName: "",
+        type: 1
+      },
+      tabCurrent: 1,
+      submit: true,
+      isSubmit: true,
+      activeIndex: 1
     };
   },
   created() {
@@ -103,7 +98,7 @@ export default {
     },
     tolink(item) {
       if (item == 1) {
-        this.$router.push('/card/bindAlipay');
+        this.$router.push('/card/bindBankcard');
       } else if (item == 2) { 
         this.$router.push('/card/bindBankcard');
       } else {
@@ -113,155 +108,245 @@ export default {
     loginOut() {
       this.FrontLogOut();
       this.$router.push("/login");
+    },
+    formatCardNumber(number, type) {
+      if (type === 1) { // 支付宝
+        return number.replace(/(\d{3})\d*(\d{3})/, '$1****$2');
+      } else { // 银行卡
+        return number.replace(/\d/g, '*').slice(0, -4) + number.slice(-4);
+      }
+    },
+    getBankBranch(item) {
+      return item.bankBranch || '重庆渝北分行'; // 如果没有分行信息则显示默认值
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-::v-deep .van-cell{
-  //background: #F4F4F4;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-::v-deep .van-icon{
-  font-size: 24px;
-  vertical-align: middle;
-  padding-right: 8px;
-}
-.test-page {
-	.btns {
-	  width: 80%;
-	  margin: 40px auto 40px auto;
-	  justify-content: space-around;
-	  .btn {
-	    color: $font_color_white !important;
-	  }
-	}
-  .top {
-    position: relative;
-    width: 100%;
-    height: 168px;
-    left: 0;
-    top: 0px;
-    background-image: url('@/assets/photo/top2.webp');
-	//background-color: #a9ae8a;
-    background-size: 100% 100%;
-    .top-head {
-      position: absolute;
-      width: 100%;
-      left: 0;
-      top: 0;
-      background-size: 100% 100%;
-      filter: drop-shadow(0px 4px 12px rgba(10, 74, 118, 0.16));
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
 
-      .nav-page-title {
-        font-family: GB5WB1B, serif;
-        letter-spacing: 2px;
-        font-size: 20px;
-        font-weight: 600;
-        padding-left: 10px;
+<style lang="scss" scoped>
+.test-page {
+  min-height: 100vh;
+  background: #F8F8F8;
+
+  ::v-deep .van-icon:before {
+    background: #fff!important;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .part_2 {
+    width: 100%;
+    height: 165px;
+    background: #FFFFFF;
+    background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+  }
+
+  .wrap {
+    padding: 16px;
+    background: #FFFFFF6B;
+    margin: 0 12px;
+    margin-top: -90px;
+    border-radius: 8px;
+
+    .empty-state {
+      text-align: center;
+      padding: 16px;
+
+      .empty-icon {
+        margin-bottom: 16px;
+        img {
+          width: 200px;
+        }
       }
 
-      .top-head-1 {
-        width: 60%;
-        display: inline-block;
-        vertical-align: middle;
-        padding-left: 20px;
-        box-sizing: border-box;
+      .empty-text {
+        font-size: 16px;
+        color: #BDC3CD;
+        margin-bottom: 32px;
+      }
 
-        span {
-          vertical-align: middle;
-          font-size: 22px;
-          font-weight: 600;
+      .van-button {
+        width: 100%;
+        height: 44px;
+        background: #4B594A;
+        border: none;
+        border-radius: 22px;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+
+    .card-list {
+      .card-item {
+        padding: 24px;
+        margin-bottom: 16px;
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        
+        &:nth-child(1) {
+          background: #C23B22;
+          background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+        
+        &:nth-child(2) {
+          background: #4B7BF9;
+          background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .card-info {
+          position: relative;
+          z-index: 1;
+
+          .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .card-title {
+            font-size: 18px;
+            color: #FFFFFF;
+            font-weight: 500;
+            margin-bottom: 4px;
+          }
+
+          .bank-branch {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+          }
+
+          .card-name {
+            font-size: 20px;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+            font-weight: 500;
+          }
+
+          .card-number {
+            font-size: 24px;
+            color: #FFFFFF;
+            font-family: monospace;
+            letter-spacing: 2px;
+          }
+        }
+
+        .edit-btn {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          
+          .van-icon {
+            margin-left: 4px;
+            font-size: 12px;
+          }
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: -40px;
+          bottom: -40px;
+          width: 200px;
+          height: 200px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+        }
+      }
+
+      .van-button {
+        width: 100%;
+        height: 44px;
+        margin-top: 32px;
+        background: #4B594A;
+        border: none;
+        border-radius: 22px;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-weight: 500;
+
+        &:active {
+          opacity: 0.9;
         }
       }
     }
   }
 
-  .page1 {
-    width: 95%;
-    margin: 20px auto 20px auto;
-	margin-top: -85px;
-    background-color: #ffffff;
-    position: relative;
-    overflow: hidden;
-	border-radius: 4px;
-	.van-button--info {
-		width: 96%; 
-		//background: linear-gradient(180deg, #dbe1ba 0%, #a8ad89 100%);
-		height: 46px; font-size: 16px; color:#fff; border-radius: 5px;
-		font-weight: 500;
-		//border:none !important;
-		
-		    color: #A7AF78 !important;
-			border: 1.5px solid #AAB086;
-			background: rgba(157, 164, 112, 0.12);
-	}
-    // padding-bottom: 60px;
-    .van-content-cell {
-      .img-icon {
-        width: 50px;
-        line-height: 55px;
-      }
-
-      img {
-        width: 35px;
-        height: 35px;
-        vertical-align: middle;
-      }
-
-      .van-cell__title {
-        line-height: 55px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding-top: 6px;
-        padding-left: 20px;
-        font-size: 18px;
-        text-align: left;
-      }
-
-      .custom-title {
-        font-size: 17px;
-        line-height: 25px;
-		span {color:#626571;font-size: 12px;padding-left: 10px;}
-      }
-      .custom-account {
-        font-size: 16px;
-        line-height: 25px;
-        color: #9AA1B1;
-      }
-      .custom-icon,
-      .custom-right {
-        line-height: 55px;
-      }
-    }
-    .peration-item{
-      text-align:center;
-    }
-    .button-row{
-      position: fixed;
-      width: 100%;
-      bottom: 30px;
-      .button{
-        width: 80%;
-        margin: 0 auto;
-        //background: rgba(172, 32, 35, 0.06);
-        //border: 1px solid #AC2023;
-        border-radius: 24px;
-        //color: #AC2023;
-        font-size: 18px;
-        padding: 15px 0;
+  .customer-service {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    
+    .service-text {
+      font-size: 16px;
+      color: #313231;
+      line-height: 1.5;
+      margin: 0;
+      font-weight: 500;
+      
+      .highlight {
+        color: #7E963C;
         font-weight: 600;
-        text-align: center;
-		
-		    color: #A7AF78 !important;
-			border: 1.5px solid #AAB086;
-			background: rgba(157, 164, 112, 0.12);
+        text-decoration: underline;
+        text-underline-offset: 2px;
       }
     }
   }
-}</style>
+
+  .data_tabs {
+    height: 44px;
+    background: #FFFFFF6B;
+    border: 1px solid #FFFFFF;
+    border-radius: 22px;
+    margin: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .data_tab {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4B594A;
+      font-size: 14px;
+      cursor: pointer;
+
+      svg {
+        margin-right: 4px;
+      }
+    }
+
+    .tab_active {
+      height: 36px;
+      background: radial-gradient(202.91% 100% at 50% 0%, #7E963C 0%, #455117 100%);
+      color: #fff;
+      border-radius: 22px;
+
+      svg {
+        color: #fff;
+      }
+    }
+  }
+}
+</style>

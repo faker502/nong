@@ -1,369 +1,422 @@
 <template>
   <div class="page">
-	<div class="part_1">  
-		<nav-bar title="添加收款方式" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
-	</div>	
+    <div class="part_1">
+      <nav-bar
+        title="添加收款账号"
+        titleColor="#313231"
+        leftIconColor="#313231"
+        class="nav-top"
+      />
+    </div>
     <div class="part_2">
       <div class="data_box">
         <div class="data_tabs df_r">
-          <div class="data_tab" :class="it.id === activeIndex ? 'tab_active' : ''" v-for="it in tabs" :key="it.id"
-            @click="handleTab(it)">
-            <!-- <svg-icon :iconClass="it.icon" :size="28" /> -->
+          <div
+            class="data_tab"
+            :class="it.id === activeIndex ? 'tab_active' : ''"
+            v-for="it in tabs"
+            :key="it.id"
+            @click="handleTab(it)"
+          >
+            <svg-icon :iconClass="it.icon" :size="20" />
             <span>{{ it.title }}</span>
           </div>
         </div>
         <div class="container">
-        <div class="wrap">
+          <div class="wrap">
+            <van-form ref="rform" class="rform" :show-error-message="true">
+              <div v-if="form.type != 1">
+                <div class="itme df_r">
+                  <!-- <div class="label">真实姓名</div> -->
+                  <van-field
+                    v-model="form.bankUserName"
+                    placeholder="请输入真实姓名"
+                    autosize
+                    autocomplete="off"
+                    :border="false"
+                    :readonly="true"
+                  >
+                  </van-field>
+                </div>
 
-          <van-form ref="rform" class="rform" :show-error-message="false">
-				  <div v-if="form.type == 1">
-					   <div class="itme df_r">
-					    <div class="label">真实姓名</div>
-					     <van-field v-model="form.bankUserName" placeholder="请输入真实姓名" autosize autocomplete="off" :border="false"
-						     :readonly="true">
-					  </van-field>
-					</div>
+                <div class="itme df_r">
+                  <!-- <div class="label">支付宝账户</div> -->
+                  <van-field
+                    v-model="form.bankNumber"
+                    placeholder="请输入您的支付宝账户"
+                    autosize
+                    autocomplete="off"
+                    :border="false"
+                    :readonly="alipayOk"
+                  />
+                </div>
 
-					<div class="itme df_r">
-					  <div class="label">支付宝账户</div>
-					  <van-field v-model="form.bankNumber" placeholder="请输入您的支付宝账户" autosize autocomplete="off" :border="false" :readonly="alipayOk" />
-					</div>
-
-					<div class="tips">
-					  <p>
-						注：请必须绑定实名认证人的支付宝账户
-					  </p>
-					</div>
-				</div>
-				
-				
-			<div v-else>
-          
-              <div class="itme df_r">
-                <div class="label">真实姓名</div>
-                <van-field v-model="form.bankUserName" placeholder="请输入真实姓名" autosize autocomplete="off" :border="false"
-                  :readonly="true">
-                </van-field>
+                <div class="tips">
+                  <van-icon name="info" />
+                  <span> 注：请必须绑定实名认证人的支付宝账户 </span>
+                </div>
               </div>
 
-              <div class="itme df_r">
-                <div class="label">银行卡卡号</div>
-                <van-field v-model="form.bankNumber" placeholder="请输入银行卡卡号" :readonly="bankOk" autosize autocomplete="off" :border="false" :rules="[{ required: true }]"  @keyup="getBankName"/>
-              </div>
+              <div v-else>
+                <div class="itme df_r" v-if="activeIndex === 0">
+                  <van-field
+                    v-model="form.bankName"
+                    readonly
+                    placeholder="请选择银行"
+                    :border="false"
+                  >
+                    <template #input>
+                      <div class="bank-select">
+                        <van-dropdown-menu>
+                          <van-dropdown-item
+                            v-model="form.bankName"
+                            :options="banklist"
+                          />
+                        </van-dropdown-menu>
+                      </div>
+                    </template>
+                  </van-field>
+                </div>
 
-              <div class="itme df_r">
-                  <div class="label" style="width:200px">银行名称 <span style="color:#ccc;">(无须填写支行)</span></div>
-                  <van-field v-model="form.bankName" placeholder="请输入银行名称" :readonly="bankOk" autosize autocomplete="off" :border="false" :rules="[{ required: true }]" />
+                <div class="itme df_r">
+                  <van-field
+                    v-model="form.bankUserName"
+                    placeholder="请输入真实姓名"
+                    autosize
+                    autocomplete="off"
+                    :border="false"
+                    :readonly="true"
+                  >
+                  </van-field>
+                </div>
 
-                  <!--<van-dropdown-menu active-color="">
-                      <van-dropdown-item v-model="form.bankName" :options="banklist"  autocomplete="off"  />
-                  </van-dropdown-menu>-->
-              </div>
+                <div class="itme df_r">
+                  <van-field
+                    v-model="form.bankNumber"
+                    :placeholder="activeIndex === 0 ? '请输入银行卡卡号' : '请输入您的支付宝账户'"
+                    :readonly="activeIndex === 0 ? bankOk : alipayOk"
+                    autosize
+                    autocomplete="off"
+                    :border="false"
+                    :rules="[{ required: true }]"
+                    @keyup="activeIndex === 0 ? getBankName() : null"
+                  />
+                </div>
 
-              <div class="tips">
-                <p>
-                  注：请必须绑定实名认证人的银行卡账户
-                </p>
+                <div class="tips">
+                  <van-icon name="info" />
+                  <span>
+                    {{ activeIndex === 0 ? '注：请必须绑定实名认证人的银行卡账户' : '注：请必须绑定实名认证人的支付宝账户' }}
+                  </span>
+                </div>
+
+                <div class="itme df_r" v-if="activeIndex === 0">
+                  <van-field
+                    v-model="form.bankBranch"
+                    placeholder="请输入银行开户分行"
+                    :readonly="bankOk"
+                    autosize
+                    autocomplete="off"
+                    :border="false"
+                    :rules="[{ required: true }]"
+                  />
+                </div>
               </div>
-          
+            </van-form>
+          </div>
+
+          <div class="part_3" v-if="isSubmit">
+            <van-button block :loading="!submit" @click="bindBank">
+              {{ submit ? "添加" : "添加中..." }}
+            </van-button>
+          </div>
         </div>
-		
-		
-		
-          </van-form>
-        </div>
-		
-		<div class="part_3" v-if="isSubmit">
-		  <div class="button" v-if="submit"  @click="bindBank">添加</div>
-		  <div class="button" v-else>添加中...</div>
-		</div>
-		
-        </div>
-		
-
-		
       </div>
-	  
-	  
-	  
     </div>
-
-
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { bankListApi, bindBankApi,getUserAndOneBankApi,bankCardAttribution } from "@/api/member";
+import {
+  bankListApi,
+  bindBankApi,
+  getUserAndOneBankApi,
+  bankCardAttribution,
+} from "@/api/member";
+import FastClick from 'fastclick';
+
 export default {
   name: "Team",
   data() {
     return {
-      'title': '添加收款方式',
+      title: "添加收款账号",
       bankList: [],
       tabs: [
         //{ title: "微信支付", id: 2, icon: 'wechat' },
-        { title: "支付宝", id: 0, icon: 'alipay' },
-        { title: "银行卡", id: 1, icon: 'bankpay' }
+        { title: "银行卡", id: 0, icon: "bankpay" },
+        { title: "支付宝", id: 1, icon: "alipay" },
       ],
       form: {
         bankNumber: "",
         bankUserName: "",
         bankName: "",
-        type: 1
+        type: 1,
       },
       tabCurrent: 1,
       submit: true,
       isSubmit: true,
       activeIndex: 0,
-	  
-	  alipayOk: false,
-	  bankOk: false,
 
-  
+      alipayOk: false,
+      bankOk: false,
+
       banklist: [
-      { text: '请选择银行', value: ''},
-      { text: '三河蒙银', value: '三河蒙银'},
-{ text: '上海农商银行', value: '上海农商银行'},
-{ text: '上海银行', value: '上海银行'},
-{ text: '上饶银行', value: '上饶银行'},
-{ text: '东亚银行', value: '东亚银行'},
-{ text: '东海村镇银行', value: '东海村镇银行'},
-{ text: '东莞农商银行', value: '东莞农商银行'},
-{ text: '东莞银行', value: '东莞银行'},
-{ text: '东营银行', value: '东营银行'},
-{ text: '中信银行', value: '中信银行'},
-{ text: '中原银行', value: '中原银行'},
-{ text: '中国银行', value: '中国银行'},
-{ text: '中银富登', value: '中银富登'},
-{ text: '临商银行', value: '临商银行'},
-{ text: '丹东银行', value: '丹东银行'},
-{ text: '乌海银行', value: '乌海银行'},
-{ text: '乌鲁木齐银行', value: '乌鲁木齐银行'},
-{ text: '九江银行', value: '九江银行'},
-{ text: '云南农信', value: '云南农信'},
-{ text: '云南省农村信用社', value: '云南省农村信用社'},
-{ text: '云南红塔银行', value: '云南红塔银行'},
-{ text: '交通银行', value: '交通银行'},
-{ text: '众邦银行', value: '众邦银行'},
-{ text: '保定银行', value: '保定银行'},
-{ text: '光大银行', value: '光大银行'},
-{ text: '兰州银行', value: '兰州银行'},
-{ text: '兴业银行', value: '兴业银行'},
-{ text: '内蒙古农村信用社联合社', value: '内蒙古农村信用社联合社'},
-{ text: '内蒙古银行', value: '内蒙古银行'},
-{ text: '农业银行', value: '农业银行'},
-{ text: '包商银行', value: '包商银行'},
-{ text: '北京农商行', value: '北京农商行'},
-{ text: '北京农商银行', value: '北京农商银行'},
-{ text: '北京银行', value: '北京银行'},
-{ text: '北京顺义银座村镇银行', value: '北京顺义银座村镇银行'},
-{ text: '华夏银行', value: '华夏银行'},
-{ text: '华融湘江银行', value: '华融湘江银行'},
-{ text: '卓资蒙银', value: '卓资蒙银'},
-{ text: '南京银行', value: '南京银行'},
-{ text: '南昌银行', value: '南昌银行'},
-{ text: '厦门银行', value: '厦门银行'},
-{ text: '友利银行', value: '友利银行'},
-{ text: '台州银行', value: '台州银行'},
-{ text: '吉林农信', value: '吉林农信'},
-{ text: '吉林省农村信用社联合社', value: '吉林省农村信用社联合社'},
-{ text: '吉林银行', value: '吉林银行'},
-{ text: '哈尔滨农村商业银行', value: '哈尔滨农村商业银行'},
-{ text: '哈尔滨银行', value: '哈尔滨银行'},
-{ text: '唐山银行', value: '唐山银行'},
-{ text: '嘉兴银行', value: '嘉兴银行'},
-{ text: '四川农信', value: '四川农信'},
-{ text: '四川天府银行', value: '四川天府银行'},
-{ text: '四川省农村信用社联合社', value: '四川省农村信用社联合社'},
-{ text: '国民村镇银行', value: '国民村镇银行'},
-{ text: '外换银行', value: '外换银行'},
-{ text: '大连银行', value: '大连银行'},
-{ text: '天津农商银行', value: '天津农商银行'},
-{ text: '天津滨海农商银行', value: '天津滨海农商银行'},
-{ text: '天津银行', value: '天津银行'},
-{ text: '太仓农商行', value: '太仓农商行'},
-{ text: '威海商业银行', value: '威海商业银行', },
-{ text: '威海市商业银行', value: '威海市商业银行'},
-{ text: '宁夏农村信用社', value: '宁夏农村信用社'},
-{ text: '宁夏银行', value: '宁夏银行'},
-{ text: '宁波通商银行', value: '宁波通商银行'},
-{ text: '宁波银行', value: '宁波银行'},
-{ text: '安徽农金', value: '安徽农金'},
-{ text: '安徽省农村信用社', value: '安徽省农村信用社'},
-{ text: '安源富民村镇银行', value: '安源富民村镇银行'},
-{ text: '富滇银行', value: '富滇银行'},
-{ text: '富邦华一银行', value: '富邦华一银行'},
-{ text: '察右前旗蒙银', value: '察右前旗蒙银'},
-{ text: '山东农商银行', value: '山东农商银行'},
-{ text: '山东省农村信用社联合社', value: '山东省农村信用社联合社'},
-{ text: '山西省农村信用社', value: '山西省农村信用社'},
-{ text: '山西银行', value: '山西银行'},
-{ text: '工商银行', value: '工商银行'},
-{ text: '常熟农商银行', value: '常熟农商银行'},
-{ text: '常熟农村商业银行', value: '常熟农村商业银行'},
-{ text: '平安银行', value: '平安银行'},
-{ text: '平顶山银行', value: '平顶山银行'},
-{ text: '广东农信', value: '广东农信'},
-{ text: '广东华兴银行', value: '广东华兴银行'},
-{ text: '广东南海农村商业银行', value: '广东南海农村商业银行'},
-{ text: '广东南粤银行', value: '广东南粤银行'},
-{ text: '广东省农村信用社联合社', value: '广东省农村信用社联合社'},
-{ text: '广东顺德农村商业银行', value: '广东顺德农村商业银行'},
-{ text: '广发银行', value: '广发银行'},
-{ text: '广州农商银行', value: '广州农商银行'},
-{ text: '广州银行', value: '广州银行'},
-{ text: '广西农信', value: '广西农信'},
-{ text: '广西农村信用社联合社', value: '广西农村信用社联合社'},
-{ text: '广西北部湾银行', value: '广西北部湾银行'},
-{ text: '广西壮族自治区农村信用社联合社', value: '广西壮族自治区农村信用社联合社'},
-{ text: '廊坊银行', value: '廊坊银行'},
-{ text: '建设银行', value: '建设银行'},
-{ text: '张家口银行', value: '张家口银行'},
-{ text: '张家港农商银行', value: '张家港农商银行'},
-{ text: '德州银行', value: '德州银行'},
-{ text: '徽商银行', value: '徽商银行'},
-{ text: '恒丰银行', value: '恒丰银行'},
-{ text: '成都农商银行', value: '成都农商银行'},
-{ text: '成都农村商业银行股份有限公司', value: '成都农村商业银行股份有限公司'},
-{ text: '成都银行', value: '成都银行'},
-{ text: '承德银行', value: '承德银行'},
-{ text: '招商银行', value: '招商银行'},
-{ text: '攀枝花市商业银行', value: '攀枝花市商业银行'},
-{ text: '文安惠民银行', value: '文安惠民银行', },
-{ text: '新疆农信', value: '新疆农信'},
-{ text: '新韩银行', value: '新韩银行'},
-{ text: '方城凤裕村镇银行', value: '方城凤裕村镇银行'},
-{ text: '无锡农商行', value: '无锡农商行'},
-{ text: '日照银行', value: '日照银行'},
-{ text: '昆仑银行', value: '昆仑银行'},
-{ text: '昆山农商银行', value: '昆山农商银行'},
-{ text: '昆明农联社', value: '昆明农联社'},
-{ text: '晋中银行', value: '晋中银行'},
-{ text: '晋商银行', value: '晋商银行'},
-{ text: '晋城银行', value: '晋城银行'},
-{ text: '朝阳银行', value: '朝阳银行'},
-{ text: '杭州银行', value: '杭州银行'},
-{ text: '枣庄银行', value: '枣庄银行'},
-{ text: '柳州银行', value: '柳州银行'},
-{ text: '桂林国民村镇银行', value: '桂林国民村镇银行'},
-{ text: '桂林银行', value: '桂林银行'},
-{ text: '武汉农商行', value: '武汉农商行'},
-{ text: '民生银行', value: '民生银行'},
-{ text: '汇丰银行', value: '汇丰银行'},
-{ text: '汉口银行', value: '汉口银行'},
-{ text: '江南银行', value: '江南银行'},
-{ text: '江苏农信', value: '江苏农信'},
-{ text: '江苏省农村信用社联合社行', value: '江苏省农村信用社联合社行'},
-{ text: '江苏银行', value: '江苏银行'},
-{ text: '江西农商银行', value: '江西农商银行'},
-{ text: '江西省农村信用社', value: '江西省农村信用社'},
-{ text: '江西裕民银行', value: '江西裕民银行'},
-{ text: '江西银行', value: '江西银行'},
-{ text: '沧州银行', value: '沧州银行'},
-{ text: '河北农信', value: '河北农信'},
-{ text: '河北省农村信用社', value: '河北省农村信用社'},
-{ text: '河北银行', value: '河北银行'},
-{ text: '河南农信', value: '河南农信'},
-{ text: '河南省农村信用社', value: '河南省农村信用社'},
-{ text: '泉州银行', value: '泉州银行'},
-{ text: '泰安银行', value: '泰安银行'},
-{ text: '洛阳银行', value: '洛阳银行'},
-{ text: '济宁银行', value: '济宁银行'},
-{ text: '浙信村镇银行', value: '浙信村镇银行'},
-{ text: '浙商银行', value: '浙商银行'},
-{ text: '浙江农信', value: '浙江农信'},
-{ text: '浙江农商银行', value: '浙江农商银行'},
-{ text: '浙江民泰商业银行', value: '浙江民泰商业银行'},
-{ text: '浙江泰隆银行', value: '浙江泰隆银行'},
-{ text: '浙江省农村信用社联合社', value: '浙江省农村信用社联合社'},
-{ text: '浙江稠州商业银行', value: '浙江稠州商业银行'},
-{ text: '浦发银行', value: '浦发银行'},
-{ text: '海丰农商银行', value: '海丰农商银行'},
-{ text: '海南农信社', value: '海南农信社'},
-{ text: '海南省农村信用社', value: '海南省农村信用社'},
-{ text: '海南银行', value: '海南银行'},
-{ text: '深圳农商行', value: '深圳农商行'},
-{ text: '渤海银行', value: '渤海银行'},
-{ text: '温州银行', value: '温州银行'},
-{ text: '湖北省农村信用社', value: '湖北省农村信用社'},
-{ text: '湖北银行', value: '湖北银行'},
-{ text: '湖南农信', value: '湖南农信'},
-{ text: '湖商村镇银行', value: '湖商村镇银行'},
-{ text: '湖州银行', value: '湖州银行'},
-{ text: '漯河银行', value: '漯河银行'},
-{ text: '潍坊银行', value: '潍坊银行'},
-{ text: '烟台银行', value: '烟台银行'},
-{ text: '焦作中旅银行', value: '焦作中旅银行'},
-{ text: '珠江村镇银行', value: '珠江村镇银行'},
-{ text: '珠海华润银行', value: '珠海华润银行'},
-{ text: '甘肃信合', value: '甘肃信合'},
-{ text: '甘肃省农村信用社', value: '甘肃省农村信用社'},
-{ text: '甘肃省农村信用社联合社', value: '甘肃省农村信用社联合社'},
-{ text: '甘肃银行', value: '甘肃银行'},
-{ text: '盘锦银行', value: '盘锦银行'},
-{ text: '盛京银行', value: '盛京银行'},
-{ text: '石嘴山银行', value: '石嘴山银行'},
-{ text: '福建农信', value: '福建农信'},
-{ text: '福建农商银行', value: '福建农商银行'},
-{ text: '福建海峡银行', value: '福建海峡银行'},
-{ text: '福建省农村信用社联合社', value: '福建省农村信用社联合社'},
-{ text: '稠州银行', value: '稠州银行'},
-{ text: '绍兴银行', value: '绍兴银行'},
-{ text: '网商银行', value: '网商银行'},
-{ text: '自贡银行', value: '自贡银行'},
-{ text: '花旗银行', value: '花旗银行'},
-{ text: '苏州农商银行', value: '苏州农商银行'},
-{ text: '苏州银行', value: '苏州银行'},
-{ text: '莱商银行', value: '莱商银行'},
-{ text: '莱阳胶东村镇银行', value: '莱阳胶东村镇银行'},
-{ text: '营口银行', value: '营口银行'},
-{ text: '葫芦岛银行', value: '葫芦岛银行'},
-{ text: '蒙商银行', value: '蒙商银行'},
-{ text: '西安银行', value: '西安银行'},
-{ text: '贵州农信', value: '贵州农信'},
-{ text: '贵州省农村信用社联合社', value: '贵州省农村信用社联合社'},
-{ text: '贵州银行', value: '贵州银行'},
-{ text: '贵阳农商银行', value: '贵阳农商银行'},
-{ text: '贵阳银行', value: '贵阳银行'},
-{ text: '赣州银行', value: '赣州银行'},
-{ text: '辽宁农信', value: '辽宁农信'},
-{ text: '辽宁省农村信用社', value: '辽宁省农村信用社'},
-{ text: '辽阳银行', value: '辽阳银行'},
-{ text: '达州银行', value: '达州银行'},
-{ text: '遂宁银行', value: '遂宁银行'},
-{ text: '邢台银行', value: '邢台银行'},
-{ text: '邮政银行', value: '邮政银行'},
-{ text: '邯郸银行', value: '邯郸银行'},
-{ text: '郑州银行', value: '郑州银行'},
-{ text: '鄂尔多斯银行', value: '鄂尔多斯银行'},
-{ text: '鄞州银行', value: '鄞州银行'},
-{ text: '重庆三峡银行', value: '重庆三峡银行'},
-{ text: '重庆农村商业银行', value: '重庆农村商业银行'},
-{ text: '重庆银行', value: '重庆银行'},
-{ text: '金华银行', value: '金华银行'},
-{ text: '银座银行', value: '银座银行'},
-{ text: '锦州银行', value: '锦州银行'},
-{ text: '长城华西银行', value: '长城华西银行'},
-{ text: '长安银行', value: '长安银行'},
-{ text: '长江银行', value: '长江银行'},
-{ text: '长沙银行', value: '长沙银行'},
-{ text: '阜新银行', value: '阜新银行'},
-{ text: '陕西信合', value: '陕西信合'},
-{ text: '陕西省农村信用社联合社', value: '陕西省农村信用社联合社'},
-{ text: '霸州舜丰村镇银行', value: '霸州舜丰村镇银行'},
-{ text: '青岛银行', value: '青岛银行'},
-{ text: '青海省农村信用社联合社', value: '青海省农村信用社联合社'},
-{ text: '青海银行', value: '青海银行'},
-{ text: '鞍山银行', value: '鞍山银行'},
-{ text: '韶关农商银行', value: '韶关农商银行'},
-{ text: '顺德农商银行', value: '顺德农商银行' },
-{ text: '黑龙江农信', value: '黑龙江农信'},
-{ text: '齐商银行', value: '齐商银行'},
-{ text: '齐鲁银行', value: '齐鲁银行'},
-{ text: '龙江银行', value: '龙江银行'},
-
-
-
+        { text: "请选择银行", value: "" },
+        { text: "三河蒙银", value: "三河蒙银" },
+        { text: "上海农商银行", value: "上海农商银行" },
+        { text: "上海银行", value: "上海银行" },
+        { text: "上饶银行", value: "上饶银行" },
+        { text: "东亚银行", value: "东亚银行" },
+        { text: "东海村镇银行", value: "东海村镇银行" },
+        { text: "东莞农商银行", value: "东莞农商银行" },
+        { text: "东莞银行", value: "东莞银行" },
+        { text: "东营银行", value: "东营银行" },
+        { text: "中信银行", value: "中信银行" },
+        { text: "中原银行", value: "中原银行" },
+        { text: "中国银行", value: "中国银行" },
+        { text: "中银富登", value: "中银富登" },
+        { text: "临商银行", value: "临商银行" },
+        { text: "丹东银行", value: "丹东银行" },
+        { text: "乌海银行", value: "乌海银行" },
+        { text: "乌鲁木齐银行", value: "乌鲁木齐银行" },
+        { text: "九江银行", value: "九江银行" },
+        { text: "云南农信", value: "云南农信" },
+        { text: "云南省农村信用社", value: "云南省农村信用社" },
+        { text: "云南红塔银行", value: "云南红塔银行" },
+        { text: "交通银行", value: "交通银行" },
+        { text: "众邦银行", value: "众邦银行" },
+        { text: "保定银行", value: "保定银行" },
+        { text: "光大银行", value: "光大银行" },
+        { text: "兰州银行", value: "兰州银行" },
+        { text: "兴业银行", value: "兴业银行" },
+        { text: "内蒙古农村信用社联合社", value: "内蒙古农村信用社联合社" },
+        { text: "内蒙古银行", value: "内蒙古银行" },
+        { text: "农业银行", value: "农业银行" },
+        { text: "包商银行", value: "包商银行" },
+        { text: "北京农商行", value: "北京农商行" },
+        { text: "北京农商银行", value: "北京农商银行" },
+        { text: "北京银行", value: "北京银行" },
+        { text: "北京顺义银座村镇银行", value: "北京顺义银座村镇银行" },
+        { text: "华夏银行", value: "华夏银行" },
+        { text: "华融湘江银行", value: "华融湘江银行" },
+        { text: "卓资蒙银", value: "卓资蒙银" },
+        { text: "南京银行", value: "南京银行" },
+        { text: "南昌银行", value: "南昌银行" },
+        { text: "厦门银行", value: "厦门银行" },
+        { text: "友利银行", value: "友利银行" },
+        { text: "台州银行", value: "台州银行" },
+        { text: "吉林农信", value: "吉林农信" },
+        { text: "吉林省农村信用社联合社", value: "吉林省农村信用社联合社" },
+        { text: "吉林银行", value: "吉林银行" },
+        { text: "哈尔滨农村商业银行", value: "哈尔滨农村商业银行" },
+        { text: "哈尔滨银行", value: "哈尔滨银行" },
+        { text: "唐山银行", value: "唐山银行" },
+        { text: "嘉兴银行", value: "嘉兴银行" },
+        { text: "四川农信", value: "四川农信" },
+        { text: "四川天府银行", value: "四川天府银行" },
+        { text: "四川省农村信用社联合社", value: "四川省农村信用社联合社" },
+        { text: "国民村镇银行", value: "国民村镇银行" },
+        { text: "外换银行", value: "外换银行" },
+        { text: "大连银行", value: "大连银行" },
+        { text: "天津农商银行", value: "天津农商银行" },
+        { text: "天津滨海农商银行", value: "天津滨海农商银行" },
+        { text: "天津银行", value: "天津银行" },
+        { text: "太仓农商行", value: "太仓农商行" },
+        { text: "威海商业银行", value: "威海商业银行" },
+        { text: "威海市商业银行", value: "威海市商业银行" },
+        { text: "宁夏农村信用社", value: "宁夏农村信用社" },
+        { text: "宁夏银行", value: "宁夏银行" },
+        { text: "宁波通商银行", value: "宁波通商银行" },
+        { text: "宁波银行", value: "宁波银行" },
+        { text: "安徽农金", value: "安徽农金" },
+        { text: "安徽省农村信用社", value: "安徽省农村信用社" },
+        { text: "安源富民村镇银行", value: "安源富民村镇银行" },
+        { text: "富滇银行", value: "富滇银行" },
+        { text: "富邦华一银行", value: "富邦华一银行" },
+        { text: "察右前旗蒙银", value: "察右前旗蒙银" },
+        { text: "山东农商银行", value: "山东农商银行" },
+        { text: "山东省农村信用社联合社", value: "山东省农村信用社联合社" },
+        { text: "山西省农村信用社", value: "山西省农村信用社" },
+        { text: "山西银行", value: "山西银行" },
+        { text: "工商银行", value: "工商银行" },
+        { text: "常熟农商银行", value: "常熟农商银行" },
+        { text: "常熟农村商业银行", value: "常熟农村商业银行" },
+        { text: "平安银行", value: "平安银行" },
+        { text: "平顶山银行", value: "平顶山银行" },
+        { text: "广东农信", value: "广东农信" },
+        { text: "广东华兴银行", value: "广东华兴银行" },
+        { text: "广东南海农村商业银行", value: "广东南海农村商业银行" },
+        { text: "广东南粤银行", value: "广东南粤银行" },
+        { text: "广东省农村信用社联合社", value: "广东省农村信用社联合社" },
+        { text: "广东顺德农村商业银行", value: "广东顺德农村商业银行" },
+        { text: "广发银行", value: "广发银行" },
+        { text: "广州农商银行", value: "广州农商银行" },
+        { text: "广州银行", value: "广州银行" },
+        { text: "广西农信", value: "广西农信" },
+        { text: "广西农村信用社联合社", value: "广西农村信用社联合社" },
+        { text: "广西北部湾银行", value: "广西北部湾银行" },
+        {
+          text: "广西壮族自治区农村信用社联合社",
+          value: "广西壮族自治区农村信用社联合社",
+        },
+        { text: "廊坊银行", value: "廊坊银行" },
+        { text: "建设银行", value: "建设银行" },
+        { text: "张家口银行", value: "张家口银行" },
+        { text: "张家港农商银行", value: "张家港农商银行" },
+        { text: "德州银行", value: "德州银行" },
+        { text: "徽商银行", value: "徽商银行" },
+        { text: "恒丰银行", value: "恒丰银行" },
+        { text: "成都农商银行", value: "成都农商银行" },
+        {
+          text: "成都农村商业银行股份有限公司",
+          value: "成都农村商业银行股份有限公司",
+        },
+        { text: "成都银行", value: "成都银行" },
+        { text: "承德银行", value: "承德银行" },
+        { text: "招商银行", value: "招商银行" },
+        { text: "攀枝花市商业银行", value: "攀枝花市商业银行" },
+        { text: "文安惠民银行", value: "文安惠民银行" },
+        { text: "新疆农信", value: "新疆农信" },
+        { text: "新韩银行", value: "新韩银行" },
+        { text: "方城凤裕村镇银行", value: "方城凤裕村镇银行" },
+        { text: "无锡农商行", value: "无锡农商行" },
+        { text: "日照银行", value: "日照银行" },
+        { text: "昆仑银行", value: "昆仑银行" },
+        { text: "昆山农商银行", value: "昆山农商银行" },
+        { text: "昆明农联社", value: "昆明农联社" },
+        { text: "晋中银行", value: "晋中银行" },
+        { text: "晋商银行", value: "晋商银行" },
+        { text: "晋城银行", value: "晋城银行" },
+        { text: "朝阳银行", value: "朝阳银行" },
+        { text: "杭州银行", value: "杭州银行" },
+        { text: "枣庄银行", value: "枣庄银行" },
+        { text: "柳州银行", value: "柳州银行" },
+        { text: "桂林国民村镇银行", value: "桂林国民村镇银行" },
+        { text: "桂林银行", value: "桂林银行" },
+        { text: "武汉农商行", value: "武汉农商行" },
+        { text: "民生银行", value: "民生银行" },
+        { text: "汇丰银行", value: "汇丰银行" },
+        { text: "汉口银行", value: "汉口银行" },
+        { text: "江南银行", value: "江南银行" },
+        { text: "江苏农信", value: "江苏农信" },
+        { text: "江苏省农村信用社联合社行", value: "江苏省农村信用社联合社行" },
+        { text: "江苏银行", value: "江苏银行" },
+        { text: "江西农商银行", value: "江西农商银行" },
+        { text: "江西省农村信用社", value: "江西省农村信用社" },
+        { text: "江西裕民银行", value: "江西裕民银行" },
+        { text: "江西银行", value: "江西银行" },
+        { text: "沧州银行", value: "沧州银行" },
+        { text: "河北农信", value: "河北农信" },
+        { text: "河北省农村信用社", value: "河北省农村信用社" },
+        { text: "河北银行", value: "河北银行" },
+        { text: "河南农信", value: "河南农信" },
+        { text: "河南省农村信用社", value: "河南省农村信用社" },
+        { text: "泉州银行", value: "泉州银行" },
+        { text: "泰安银行", value: "泰安银行" },
+        { text: "洛阳银行", value: "洛阳银行" },
+        { text: "济宁银行", value: "济宁银行" },
+        { text: "浙信村镇银行", value: "浙信村镇银行" },
+        { text: "浙商银行", value: "浙商银行" },
+        { text: "浙江农信", value: "浙江农信" },
+        { text: "浙江农商银行", value: "浙江农商银行" },
+        { text: "浙江民泰商业银行", value: "浙江民泰商业银行" },
+        { text: "浙江泰隆银行", value: "浙江泰隆银行" },
+        { text: "浙江省农村信用社联合社", value: "浙江省农村信用社联合社" },
+        { text: "浙江稠州商业银行", value: "浙江稠州商业银行" },
+        { text: "浦发银行", value: "浦发银行" },
+        { text: "海丰农商银行", value: "海丰农商银行" },
+        { text: "海南农信社", value: "海南农信社" },
+        { text: "海南省农村信用社", value: "海南省农村信用社" },
+        { text: "海南银行", value: "海南银行" },
+        { text: "深圳农商行", value: "深圳农商行" },
+        { text: "渤海银行", value: "渤海银行" },
+        { text: "温州银行", value: "温州银行" },
+        { text: "湖北省农村信用社", value: "湖北省农村信用社" },
+        { text: "湖北银行", value: "湖北银行" },
+        { text: "湖南农信", value: "湖南农信" },
+        { text: "湖商村镇银行", value: "湖商村镇银行" },
+        { text: "湖州银行", value: "湖州银行" },
+        { text: "漯河银行", value: "漯河银行" },
+        { text: "潍坊银行", value: "潍坊银行" },
+        { text: "烟台银行", value: "烟台银行" },
+        { text: "焦作中旅银行", value: "焦作中旅银行" },
+        { text: "珠江村镇银行", value: "珠江村镇银行" },
+        { text: "珠海华润银行", value: "珠海华润银行" },
+        { text: "甘肃信合", value: "甘肃信合" },
+        { text: "甘肃省农村信用社", value: "甘肃省农村信用社" },
+        { text: "甘肃省农村信用社联合社", value: "甘肃省农村信用社联合社" },
+        { text: "甘肃银行", value: "甘肃银行" },
+        { text: "盘锦银行", value: "盘锦银行" },
+        { text: "盛京银行", value: "盛京银行" },
+        { text: "石嘴山银行", value: "石嘴山银行" },
+        { text: "福建农信", value: "福建农信" },
+        { text: "福建农商银行", value: "福建农商银行" },
+        { text: "福建海峡银行", value: "福建海峡银行" },
+        { text: "福建省农村信用社联合社", value: "福建省农村信用社联合社" },
+        { text: "稠州银行", value: "稠州银行" },
+        { text: "绍兴银行", value: "绍兴银行" },
+        { text: "网商银行", value: "网商银行" },
+        { text: "自贡银行", value: "自贡银行" },
+        { text: "花旗银行", value: "花旗银行" },
+        { text: "苏州农商银行", value: "苏州农商银行" },
+        { text: "苏州银行", value: "苏州银行" },
+        { text: "莱商银行", value: "莱商银行" },
+        { text: "莱阳胶东村镇银行", value: "莱阳胶东村镇银行" },
+        { text: "营口银行", value: "营口银行" },
+        { text: "葫芦岛银行", value: "葫芦岛银行" },
+        { text: "蒙商银行", value: "蒙商银行" },
+        { text: "西安银行", value: "西安银行" },
+        { text: "贵州农信", value: "贵州农信" },
+        { text: "贵州省农村信用社联合社", value: "贵州省农村信用社联合社" },
+        { text: "贵州银行", value: "贵州银行" },
+        { text: "贵阳农商银行", value: "贵阳农商银行" },
+        { text: "贵阳银行", value: "贵阳银行" },
+        { text: "赣州银行", value: "赣州银行" },
+        { text: "辽宁农信", value: "辽宁农信" },
+        { text: "辽宁省农村信用社", value: "辽宁省农村信用社" },
+        { text: "辽阳银行", value: "辽阳银行" },
+        { text: "达州银行", value: "达州银行" },
+        { text: "遂宁银行", value: "遂宁银行" },
+        { text: "邢台银行", value: "邢台银行" },
+        { text: "邮政银行", value: "邮政银行" },
+        { text: "邯郸银行", value: "邯郸银行" },
+        { text: "郑州银行", value: "郑州银行" },
+        { text: "鄂尔多斯银行", value: "鄂尔多斯银行" },
+        { text: "鄞州银行", value: "鄞州银行" },
+        { text: "重庆三峡银行", value: "重庆三峡银行" },
+        { text: "重庆农村商业银行", value: "重庆农村商业银行" },
+        { text: "重庆银行", value: "重庆银行" },
+        { text: "金华银行", value: "金华银行" },
+        { text: "银座银行", value: "银座银行" },
+        { text: "锦州银行", value: "锦州银行" },
+        { text: "长城华西银行", value: "长城华西银行" },
+        { text: "长安银行", value: "长安银行" },
+        { text: "长江银行", value: "长江银行" },
+        { text: "长沙银行", value: "长沙银行" },
+        { text: "阜新银行", value: "阜新银行" },
+        { text: "陕西信合", value: "陕西信合" },
+        { text: "陕西省农村信用社联合社", value: "陕西省农村信用社联合社" },
+        { text: "霸州舜丰村镇银行", value: "霸州舜丰村镇银行" },
+        { text: "青岛银行", value: "青岛银行" },
+        { text: "青海省农村信用社联合社", value: "青海省农村信用社联合社" },
+        { text: "青海银行", value: "青海银行" },
+        { text: "鞍山银行", value: "鞍山银行" },
+        { text: "韶关农商银行", value: "韶关农商银行" },
+        { text: "顺德农商银行", value: "顺德农商银行" },
+        { text: "黑龙江农信", value: "黑龙江农信" },
+        { text: "齐商银行", value: "齐商银行" },
+        { text: "齐鲁银行", value: "齐鲁银行" },
+        { text: "龙江银行", value: "龙江银行" },
       ],
     };
   },
@@ -371,24 +424,41 @@ export default {
   created() {
     this.getRealName();
   },
-  mounted() {},
+  mounted() {
+    // 初始化 FastClick
+    FastClick.attach(document.body);
+    // 禁用 FastClick 对输入框的处理
+    FastClick.prototype.focus = function(targetElement) {
+      let length;
+      if (targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
+        length = targetElement.value.length;
+        targetElement.focus();
+        targetElement.setSelectionRange(length, length);
+      } else {
+        targetElement.focus();
+      }
+    };
+  },
   methods: {
     handleTab(it) {
-      if (it.id != this.activeIndex ) { 
+      if (it.id != this.activeIndex) {
         this.activeIndex = it.id;
         this.setBankList();
       }
       if (it.id == 1) {
         this.form.type = 2;
       } else {
-		  this.form.type = 1;
-	  }
+        this.form.type = 1;
+      }
     },
     getRealName() {
-      getUserAndOneBankApi({bank:-1}).then((res) => {
+      getUserAndOneBankApi({ bank: -1 }).then((res) => {
         if (res.data.user.isReal == 2) {
-          this.$dialog({ message: '请您完成实名认证', className: 'dialog-error' }).then(() => {
-            this.$router.push('/set/cert');
+          this.$dialog({
+            message: "请您完成实名认证",
+            className: "dialog-error",
+          }).then(() => {
+            this.$router.push("/set/cert");
           });
           return false;
         }
@@ -398,30 +468,20 @@ export default {
       });
     },
     setBankList() {
-      
       if (this.bankList.length > 1) {
-     
-
-         for (var i = 0, len = this.bankList.length; i < len; i++) {
-
-
-               if (this.activeIndex == 0 && this.bankList[i].type == 1) {
-                      this.form.bankNumber = this.bankList[i].number;
-                      this.form.bankUserName = this.bankList[i].name;
-                     this.alipayOk = true;
-                      break;
-                      
-                } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
-                
-                      this.form.bankName = this.bankList[i].bankName;
-                      this.form.bankNumber = this.bankList[i].number;
-					this.bankOk = true;
-                      break
-                }
-
-         }
-
-
+        for (var i = 0, len = this.bankList.length; i < len; i++) {
+          if (this.activeIndex == 0 && this.bankList[i].type == 1) {
+            this.form.bankNumber = this.bankList[i].number;
+            this.form.bankUserName = this.bankList[i].name;
+            this.alipayOk = true;
+            break;
+          } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
+            this.form.bankName = this.bankList[i].bankName;
+            this.form.bankNumber = this.bankList[i].number;
+            this.bankOk = true;
+            break;
+          }
+        }
 
         /*if (this.activeIndex == 1) {
           if (this.bankList[1].type == 2) {
@@ -439,37 +499,30 @@ export default {
           }
         }*/
 
-
         this.isSubmit = false;
       } else if (this.bankList.length == 1) {
-        
-           this.form.bankNumber = '';
-           for (var i = 0, len = this.bankList.length; i < len; i++) {
+        this.form.bankNumber = "";
+        for (var i = 0, len = this.bankList.length; i < len; i++) {
+          console.log(this.activeIndex);
+          console.log(this.bankList[i].bankName);
 
-               console.log(this.activeIndex)
-                console.log(this.bankList[i].bankName)
-
-                if (this.activeIndex == 0 && this.bankList[i].type == 1) {
-                      this.form.bankNumber = this.bankList[i].number;
-                      this.form.bankUserName = this.bankList[i].name;
-                      this.form.bankName = ''
-					  this.alipayOk = true;
-                      this.isSubmit = false;
-                      break;
-                      
-                } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
-                
-                      this.form.bankName = this.bankList[i].bankName;
-                      this.form.bankNumber = this.bankList[i].number;
-					  this.bankOk = true;
-                      this.isSubmit = false;
-                      break
-                } else {
-                    this.isSubmit = true;
-                }
-
-           }
-
+          if (this.activeIndex == 0 && this.bankList[i].type == 1) {
+            this.form.bankNumber = this.bankList[i].number;
+            this.form.bankUserName = this.bankList[i].name;
+            this.form.bankName = "";
+            this.alipayOk = true;
+            this.isSubmit = false;
+            break;
+          } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
+            this.form.bankName = this.bankList[i].bankName;
+            this.form.bankNumber = this.bankList[i].number;
+            this.bankOk = true;
+            this.isSubmit = false;
+            break;
+          } else {
+            this.isSubmit = true;
+          }
+        }
 
         /*if (this.activeIndex == 1 && this.bankList[0].type == 2) {
           this.isSubmit = false;
@@ -482,48 +535,64 @@ export default {
           this.isSubmit = true;
             this.form.bankNumber = '';
         }*/
-
-
-      } else { 
-          this.form.bankName = '';
-          this.form.bankNumber = '';
+      } else {
+        this.form.bankName = "";
+        this.form.bankNumber = "";
       }
-	  
-	  
     },
-    getBankName() { 
+    getBankName() {
       var res = bankCardAttribution({ cardNo: this.form.bankNumber });
       if (res) {
-        this.form.bankName = res == 'error' ? '' : res.bankName;
+        this.form.bankName = res == "error" ? "" : res.bankName;
       }
     },
     bindBank() {
-      if (this.form.type == 1) {
-        if (this.form.bankNumber == undefined || this.form.bankNumber.length <= 0) {
-          this.$myMsg.notify({ content: '请填写支付宝账户', type: 'error', time:1000 });
+      if (this.form.type != 1) {
+        if (
+          this.form.bankNumber == undefined ||
+          this.form.bankNumber.length <= 0
+        ) {
+          this.$myMsg.notify({
+            content: "请填写支付宝账户",
+            type: "error",
+            time: 1000,
+          });
           return false;
         }
 
-        var msg = '支付宝账号';
-      } else if (this.form.type == 2) { 
-        if (this.form.bankNumber == undefined || this.form.bankNumber.length <= 0) {
-          this.$myMsg.notify({ content: '请填写银行卡卡号', type: 'error', time:1000 });
+        var msg = "支付宝账号";
+      } else if (this.form.type == 0) {
+        if (
+          this.form.bankNumber == undefined ||
+          this.form.bankNumber.length <= 0
+        ) {
+          this.$myMsg.notify({
+            content: "请填写银行卡卡号",
+            type: "error",
+            time: 1000,
+          });
           return false;
         }
         if (this.form.bankName == undefined || this.form.bankName.length <= 0) {
-          this.$myMsg.notify({ content: '请填写开户银行', type: 'error', time:1000 });
+          this.$myMsg.notify({
+            content: "请填写开户银行",
+            type: "error",
+            time: 1000,
+          });
           return false;
         }
-        var msg = '银行账号';
+        var msg = "银行账号";
       } else {
-		  
-	  }
+      }
       bindBankApi(this.form).then((res) => {
         if (res.code == 200) {
-          this.$dialog({ message: msg+'绑定成功', className: 'dialog-error' });
+          this.$dialog({
+            message: msg + "绑定成功",
+            className: "dialog-error",
+          });
           this.$router.push("/withdraw");
         } else {
-          this.$dialog({ message: res.msg, className: 'dialog-error' });
+          this.$dialog({ message: res.msg, className: "dialog-error" });
         }
       });
     },
@@ -538,398 +607,267 @@ export default {
         this.onLoad();
       }
       //console.log('index1：'+this.activeIndex);
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.van-hairline--bottom::after {
-  border-bottom: none;
-}
-.svg-icon{
-  vertical-align: middle;
-}
 .page {
-  height: 100%;
-  position: relative;
-  background: url('@/assets/photo/top2.webp') top left no-repeat;
-  //background-color: #a9ae8a;
-  background-size: 100% 168px;
-  .navbar {
-    position: absolute;
-    width: 100%;
-    top: 0;
-  }
+  min-height: 100vh;
+  background: #f8f8f8;
 
-  .navbar-title {
-    font-family: "GB5WB1B", serif;
-    color: #ffffff;
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: 600;
-  }
-
-  .van-nav-bar .van-icon {
-    color: #ffffff;
-  }
   .part_1 {
-    position: relative;
     width: 100%;
-    top: 0;
-    height: 66px;
-    background-size: 100% 100%;
-    .info_box {
-      position: relative;
-      width: 94%;
-      margin: 0 auto;
-      // height: halfSize(182px);
-      top: 0px;
-      padding: 0px 0 20px;
-      box-sizing: border-box;
-      color: #ffffff;
-      .my-inviter {
-        padding: 10px 0 10px 24px;
-        font-size: 18px;
-
-        p:nth-child(1) {
-          padding: 10px 0;
-        }
-
-        p:nth-child(2) {
-          padding: 15px 0;
-          font-size: 30px;
-          font-weight: 600;
-        }
-      }
-    }
-
-    .w_70 {
-      // width: 70%;
-      justify-content: space-between;
-      height: 100%;
-    }
-
-    .line {
-      height: 25px;
-      width: 2px;
-      background: #707070;
-    }
-
-    .info_item {
-      align-items: center;
-      flex: 1;
-      height: 100%;
-
-      .num {
-        font-size: 20px;
-        margin-top: 20px;
-        font-weight: 600;
-      }
-
-      .text {
-        font-size: 18px;
-      }
-    }
+    height: 165px;
+    background: #ffffff;
+    background: linear-gradient(
+      180deg,
+      #f2f6d4 0%,
+      rgba(255, 254, 252, 0) 100%
+    );
+  }
+  .part_2 {
+    width: 100%;
+    // border: 1px solid blue;
+    margin-top: -90px;
   }
 
-  .part_2 {
-    position: relative;
-    width: 100%;
-    margin-top: 0;
-    height: auto;
-    .data_box {
-      min-height: 362px;
-      padding: 10px 0;
-      .count-list {
-        width: 92%;
-        margin: 10px auto;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 8px;
-        height: 90px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.1);
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.0528889);
-        border-radius: 12px;
-        font-size: 18px;
-        .count-column {
-          background: #F5F5F5;
-          padding: 4px;
-          display: grid;
-          align-items: center;
-          span {
-            font-size: 20px;
-            font-weight: 600;
-          }
-        }
-      }
+  ::v-deep .van-icon:before {
+    background: #fff !important;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      .data_tabs {
-        width: 90%;
-        margin: 0 auto 5px auto;
-        height: 38px;
-        justify-content: space-between;
-        // padding: 0px 15px;
-        //background: rgba(250, 252, 255, 0.7);
-        border-radius: 8px;
-      }
+  .wrap {
+    padding: 16px;
+    background: #ffffff6b;
+    margin: 0 12px;
+    // margin-top: -90px;
+    border-radius: 8px;
 
-      .data_tab {
-        font-size: 16px;
-        //background: #F7F7F7;
-        color: #fff;
-        padding: 6px 22px;
-        font-weight: 400;
-        width: 32%;
-        text-align: center;
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 12px;
+
+      .tab-item {
+        flex: 1;
+        height: 44px;
         display: flex;
-        flex-direction: row;
-        justify-content: center;
         align-items: center;
-        gap: 10px;
-      }
-
-      .tab_active {
-        font-weight: 500;
-        font-size: 16px;
-        display: flex;
-        flex-direction: row;
         justify-content: center;
-        align-items: center;	
-        //background: #F5EDED;
-        //border-radius: 8px;
-        //border: 1px solid #FF4040;
-		 span {
-			 border-bottom:3px solid #FFF;
-			 padding-bottom: 5px;
-			 color:#fff;
-			 font-weight: 600;
-		 }
-      }
+        border-radius: 8px;
+        color: #313231;
+        font-size: 14px;
+        cursor: pointer;
 
-      .data_list {
-        margin-top: 6px;
-        .list_top {
-          padding: 0px 20%;
-          justify-content: space-between;
-
-          .text_d {
-            text-align: center;
-            color: $font_color;
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 30px;
-
-            p:nth-child(1) {
-              font-family: 'DIN Alternate';
-              font-style: normal;
-              font-weight: 700;
-              font-size: 16px;
-              text-align: center;
-              color: #151E29;
-            }
-
-            p:nth-child(2) {
-              font-family: 'PingFang SC';
-              font-style: normal;
-              font-weight: 400;
-            }
-          }
+        svg {
+          margin-right: 4px;
         }
 
-        .d_table {
-          margin-top: 10px;
-          .d_thead {
-            font-family: 'PingFang SC';
-            font-style: normal;
-            font-weight: 600;
-            padding: 0 25px;
-            height: halfSize(61px);
-            line-height: halfSize(61px);
-            justify-content: space-between;
-            color: #4D4D4D;
-            font-size: 15px;
-            .th_item {
-              flex: 1;
+        &.active {
+          background: #4b594a;
+          color: #fff;
 
-              &:nth-child(2),
-              &:nth-child(3) {
-                text-align: center;
-              }
-
-              &:last-child {
-                text-align: right;
-              }
-            }
-            .th_item:nth-child(2) {
-              flex: 1.5;
-            }
+          svg {
+            color: #fff;
           }
+        }
+      }
+    }
 
-          .d_body {
-            padding: 0px 25px;
-            .d_td:nth-child(1) {
-              margin-top: 10px;
-            }
-            .d_td {
+    .rform {
+      .van-field {
+        height: 44px;
+        background: #ffffff;
+        border-radius: 4px;
+        margin-bottom: 24px;
+        padding: 0 16px;
+        border: none;
+        display: flex;
+        align-items: center;
+
+        .bank-select {
+          width: 100%;
+          height: 100%;
+
+          ::v-deep .van-dropdown-menu {
+            width: 100%;
+            height: 100%;
+
+            .van-dropdown-menu__bar {
+              height: 100%;
+              box-shadow: none;
+              background: transparent;
+              display: flex;
               justify-content: space-between;
+              align-items: center;
+              padding: 0;
+            }
+
+            .van-dropdown-menu__title {
+              color: #999999;
               font-size: 15px;
-              padding: 14px 0;
-              .td_item {
-                flex: 1;
-                &:nth-child(2) {
-                  text-align: center;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              margin: 0;
+
+              &::after {
+                position: static;
+                transform: none;
+                border-color: #999999 #999999 transparent transparent;
+                border-style: solid;
+                border-width: 4px;
+                margin-left: auto;
+                transform: rotate(135deg);
+                transition: transform 0.2s;
+              }
+            }
+
+            &--opened {
+              .van-dropdown-menu__title {
+                &::after {
+                  transform: rotate(-45deg);
                 }
-                &:last-child {
-                  text-align: right;
-                }
-              }
-              .td_item:nth-child(2) {
-                flex: 1.5;
-              }
-              .td_item:nth-child(3) {
-                text-align: center;
-                font-weight: 600;
-              }
-              .color_g {
-                color: $font_success;
-              }
-              .color_r {
-                color: $font_faild;
               }
             }
           }
         }
 
-        .more {
-          margin-top: 20px;
-          justify-content: center;
-          color: $font_color6;
-          font-size: 13px;
+        &::deep(.van-field__body) {
+          width: 100%;
+          height: 100%;
         }
-      }
-    }
 
-    .container {
-		width: 95%;
-      height: calc(100% - 48px);
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      margin: 0 auto;
-      background-color: #ffffff;
+        &::deep(.van-field__control) {
+          height: 44px;
+          line-height: 44px;
+          font-size: 15px;
+          color: #333333;
+          padding: 0;
+        }
 
-      .wrap {
-        padding: 10px 10px;
-        .title {
+        &::deep(.van-field__right-icon) {
+          height: 44px;
+          line-height: 44px;
+          display: flex;
+          align-items: center;
+          color: #999999;
           font-size: 16px;
-          color: $font_color_dark;
-          // font-weight: bold;
+          padding-left: 12px;
         }
 
-        .rform {
-          background: $bg_color;
-          padding: 5px 10px 10px;
-          border-radius: 5px;
-
-          .itme {
-            justify-content: flex-start;
-            margin-bottom: 20px;
-            margin-top: 30px;
-            display: block;
-          }
-
-          .label {
-            width: 120px;
-            font-size: 16px;
-            color: #70783D;
-            margin: 10px 0;
-          }
-
-          .tips {
-            color: #D20B0B;
-            line-height: 1.5;
-            font-size: 14px;
-          }
-        }
-
-        .bottom {
-          margin-top: 3rem;
-
-          .pro {
-            justify-content: center;
-
-            &_text {
-              margin-left: 5px;
-            }
-
-            &_txt {
-              color: #3198ff;
-            }
-          }
-        }
-
-        .btns {
-          margin-top: 20px;
-          justify-content: center;
+        &::deep(.van-field__placeholder) {
+          color: #999999;
         }
       }
     }
-    }
 
-  ::v-deep .van-form {
-    .van-cell {
-      font-size: 13px;
-      background-color: $base_bg_color;
-      border-bottom: 1px solid #c6c6c6;
-    }
-    .itme:nth-child(1) .van-cell{
-      //background-color: #F7F7F7;
-    }
-    .van-field__body {
-      height: 30px;
-    }
-    .van-field__label {
-      color: $font_color_dark;
+    .tips {
       display: flex;
       align-items: center;
-    }
-    input.van-field__control {
-      color: $font_color_dark;
-      height: 100%;
-      padding-left: 10px;
-      font-size: 16px;
+      padding: 12px 0;
+      color: #ff4d4f;
+      font-size: 12px;
+      margin-top: -24px;
+
+      .van-icon {
+        margin-right: 4px;
+        font-size: 14px;
+        color: #ff4d4f;
+      }
     }
 
-    input.van-field__control::-webkit-input-placeholder {
-      color: #bebebe !important;
-    }
+    .btns {
+      margin-top: 32px;
 
+      .van-button {
+        width: 100%;
+        height: 44px;
+        background: #4b594a;
+        border: none;
+        border-radius: 22px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 500;
+
+        &:active {
+          opacity: 0.9;
+        }
+      }
+    }
   }
 
   .part_3 {
-    position: relative;
-    //bottom: 46px;
-	//top:700px;
-    width: 100%;
-	height: 100px;
-    margin: 10px auto;
-    text-align: center;
-    padding-bottom: 20px;
-    background: #fff;
-    .button {
-      width: 90%;
-      margin: 0 auto;
-      //background: linear-gradient(180deg, #dbe1ba, #a8ad89);
-      border-radius: 5px;
-      text-align: center;
+    padding: 24px 0;
+    margin: 0 12px;
+
+    .van-button {
+      width: 100%;
+      height: 44px;
+      background: #4b594a;
+      border: none;
+      border-radius: 22px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+
+      &:active {
+        opacity: 0.9;
+      }
+
+      &.van-button--loading {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .data_tabs {
+    height: 44px;
+    background: #ffffff6b;
+    border: 1px solid #ffffff;
+    border-radius: 22px;
+    margin: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .data_tab {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4b594a;
+      font-size: 14px;
+      cursor: pointer;
+
+      svg {
+        margin-right: 4px;
+      }
+    }
+
+    .tab_active {
+      background: radial-gradient(
+        202.91% 100% at 50% 0%,
+        #7e963c 0%,
+        #455117 100%
+      );
       color: #fff;
-      font-size: 18px;
-      padding: 16px;
-	  
-	      color: #A7AF78 !important;
-	  	border: 1.5px solid #AAB086;
-	  	background: rgba(157, 164, 112, 0.12);
+      border-radius: 22px;
+      height: 36px;
+      svg {
+        color: #fff;
+      }
     }
   }
 }
