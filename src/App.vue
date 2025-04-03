@@ -141,7 +141,8 @@ body {
   display: none !important;
 }
 .van-nav-bar__content {
-	height: 65px !important;
+	// height: 65px !important;
+  height: 44px !important;
 }
 .van-nav-bar {
 	position: fixed;

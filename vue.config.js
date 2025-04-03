@@ -47,10 +47,17 @@ module.exports = defineConfig({
       },
     },
     proxy: {
-      "/home": {
-        target: "http://" + needHost + ":" + api_port + "/",
+      // "/home": {
+      //   target: "http://" + needHost + ":" + api_port + "/",
+      //   changeOrigin: true,    //必须，允许跨域
+      //   pathRewrite: {
+      //   },
+      // },
+      "/app": {
+        target: "http://farmer.uynhj.com",
         changeOrigin: true,    //必须，允许跨域
         pathRewrite: {
+          "^/app": "",
         },
       },
     },
