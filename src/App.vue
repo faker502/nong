@@ -297,16 +297,6 @@ body {
   border-top: none !important;
   box-shadow: 0px -1px 5px 0px #29408733;
 
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.1);
-  }
-
   .van-tabbar-item {
     font-size: 15px;
     height: 58px !important;

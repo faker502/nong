@@ -5,13 +5,13 @@
 		
 	<div class="top">
 		<div class="user-logo">
-			<img src="@/assets/photo/user-logo.png" style="height:50px;" />
+			<img src="@/assets/photo/user-logo.png"  style="visibility: hidden;"/>
 		</div>
 	</div>
 	
     <div class="part1">
 	 
-      <div class="top-head">
+      <!-- <div class="top-head">
 		<div class="top-1">
 			<div class="top-2">
 				<img :src="portraitUrl" style="width:50px;height:50px;border-radius:50px;">
@@ -25,18 +25,18 @@
 			</div>		
 		</div>
 		<div class="top-1"></div>
-      </div>
+      </div>-->
 	 
       <div class="container df_c">
      
 	 
-	 <div class="m-grid3" >
+	 <!-- <div class="m-grid3" >
 	 	<div class="m-flex3" @click="$router.push('/roll')">
 			
 			  <img  src="@/assets/photo/roll.webp" style="width:100%;height:150px;border-radius:5px;">
 			
 		</div>
-	 </div>
+	 </div>  -->
 	 
 	 
 	 
@@ -46,58 +46,80 @@
 
 		</div> -->
 		
-		<div class="m-grid" style="margin-top: 20px;">					
+		<!-- <div class="m-grid" style="margin-top: 20px;">					
 			<div class="m-flex">{{ data.desc }}</div>
 			<div class="m-flex">{{ data.today }}</div>
 
-		</div>
+		</div> -->
 		
 		
 
-	
+		<h2>二维码</h2>
 		
         <div class="part1-2 df_r" v-show="ifShow">
-
-
-         <div class="copy_box">
-            <div class="copy_item df_r">
-              <div class="left">
-                 <p>我的邀请码</p> 
-                 <span>{{ shareCode }}</span>
-              </div>
-            </div>
-          </div>
-
-
           <div class="code">
-            <div @click="handleCopyQr">
+            <div @click="handleCopyQr" class="qr-code">
               <vue-qr
                 :correctLevel="3"
                 :autoColor="false"
                 :text="shareLink"
-                :size="100"
+                :size="180"
                 :margin="5"
                 :logoMargin="3"
               ></vue-qr>
+            </div>
+			<p>保存二维码图片</p>
+          </div>
+
+		   <div class="copy_box">
+            <div class="copy_item df_r">
+              <div class="left">
+                 <p>与您的朋友分享此邀请码</p>
+				 <div>
+					 <span>{{ shareCode }}</span>
+					 <strong @click="handleCopyCode"><van-icon name="records-o" color="#fff" size="18" /></strong>
+				</div> 
+                
+              </div>
             </div>
           </div>
 
         </div>
 		
-		<div class="part2"  v-show="ifShow">
+		<!-- <div class="part2"  v-show="ifShow">
 		  <div @click="handleCopyCode" class="button">复制邀请码</div>
 		  <div @click="handleCopyLink" class="button" style="margin-top:20px">复制邀请链接</div>
 		</div>
 		
 		<div class="part2"  v-show="data.buy">
 		  <div @click="$router.push(data.buyUrl)" class="button">{{ data.buy }}</div>
-		</div>
+		</div> -->
 				
 	
 			
 			
       </div>
     </div>
+
+	<!-- 列表 -->
+	<ul class="part1 list" style="margin-top: 20px;">
+		<li v-for="item in 5" :key="item">
+			<img src="@/assets/photo/team.png" alt="" class="list-left">
+			<div class="list-right">
+				<div class="list-top">
+					<div class="list-top-left">
+						<p>直推<strong>1</strong>人</p>
+						<p>奖励<strong>10000</strong>元数字人民币</p>
+					</div>
+					<button :class="{'active': item == 1}">领取</button>
+				</div>
+				<div class="list-bottom">
+					<p></p>
+					<span>1/5</span>
+				</div>
+			</div>
+		</li>
+	</ul>
 	
   </div>
 </template>
@@ -326,23 +348,30 @@ export default {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
+  background: #f3f3f3;
   
 	.top {
 	  position: relative;
 	  /*border:3px solid blue;*/
 	  width: 100%;
-	  height: 240px;
+	  height: 196px;
 	  left: 0;
 	  top: 0px;
-	  background-image: url('@/assets/photo/top-bg.webp');
+	  background-image: url('@/assets/photo/top-bg.png');
 		//background-color: #a9ae8a;
 	  background-size: 100% 100%;
 		
 		.user-logo {
-			width: 100%;
-			height: 50px;
+			width: 121px;
+			height: 44px;
 			text-align: center;
-			padding-top: 30px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0 auto;
+			img {
+				width: 100%;
+			}
 		}
 	}
   
@@ -350,23 +379,24 @@ export default {
     position: relative;
     height: auto;
     left: 0;
-    background: #FFFFFF;
-	text-align: center;
-	margin:0 auto;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	margin-top: -130px;
-	width:95%;
+    background: #FFFFFF6B;
+    text-align: center;
+    margin:0 auto;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-top: -130px;
+    width:95%;
+	border-radius: 8px;
 	
 	.top-head {
 		
       position: relative;
-      display: grid;
-      grid-template-columns:65% 35%;
+    //   display: grid;
+    //   grid-template-columns:65% 35%;
       text-align: center;
 	  margin:0 auto ;
 
-	  height: 100px;
+	//   height: 100px;
 	  .top-1 {
 		  display: flex;
 		      align-items: center;
@@ -426,9 +456,20 @@ export default {
       position: relative;
       top: calc(33%);
       display: block;
-	  margin:0 0 3rem 0;
+	//   margin:0 0 3rem 0;
 	  color:#3F3D38;
 	  min-height: 400px;
+	  padding: 12px;
+	  h2 {
+		font-size: 18px;
+		font-weight: 600;
+		color: #313231;
+		margin-bottom: 10px;
+		width: 100%;
+		text-align: left;
+		height: 40px;
+		line-height: 40px;
+	  }
 	  .m-grid {
 		  display: grid;
 		  position: relative;
@@ -478,42 +519,92 @@ export default {
 	  }
       
       .part1-2 {
-		
         margin:0 auto;
-        width: 80%;
-        display: block;
+        // width: 80%;
+        // display: block;
 		position: relative;
-		display: grid;
-		grid-template-columns:50% 50%;
+		// display: grid;
+		// grid-template-columns:50% 50%;
+		display: flex;
+		flex-direction: column!important;
+		align-items: center;
         
-		margin:30px auto ;
+		// margin:30px auto ;
       }
       .copy_box {
-        margin: 10px 0;
+        // margin: 10px 0;
+		margin-top: 40px;
+		width: 100%;
         .copy_item {
+			font-size: 13px;
+			color: #6C6E6C;
+			width: 100%;
           .left {
-
+			display: flex;
+			flex-direction: column;
             border-radius: 7px;
             width: auto;
             height: halfSize(64px);
             line-height: halfSize(64px);
             padding: 0px 5px;
             color: $font_color_dark;
+			width: 100%;
+			div {
+				background: #fff;
+				height: 40px!important;
+				flex: 1;
+				border-radius: 8px;
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 4px 12px;
+				box-sizing: border-box;
+				span{
+					font-size: 18px;
+					color: #313231;
+					font-weight: 600;
+					margin-top:0;display:block;
+					text-align: left;
+				}
+				strong {
+					width: 24px;
+					height: 24px;
+					background: #4B594A;
+					border-radius: 5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+			}
             
-			p {color:#626571; font-size:15px;margin:0;text-align: left;}
+			p {color:#626571; font-size:15px;margin-bottom:8px;text-align: left;}
            
-            span{
-              font-size: 18px;
-              color: #0E2529;
-              font-weight: 600;
-			  margin-top:0;display:block;
-			  text-align: left;
-            }
+            
           }
         }
       }
       .code {
-        margin-top:10px;
+        margin-top:12px;
+		.qr-code {
+			width: 180px;
+			height: 180px;
+			border-radius: 8px;
+			background: #fff;
+			overflow: hidden;
+		}
+		p {
+			width: 180px;
+			height: 40px;
+			font-size: 16px;
+			color: #fff;
+			// margin-top: 10px;
+			line-height: 40px;
+			background: linear-gradient(180deg, #7E963C 0%, #455117 100%);
+			font-weight: 500;
+			border-bottom-left-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
         .button {
           display: flex;
           justify-content: center;
@@ -616,5 +707,87 @@ export default {
     font-size: 14px;
     color: $font_color_white !important;
   }
+}
+
+.list {
+	background: transparent;
+	padding-bottom: 30px;
+	li {
+		display: flex;
+		padding: 12px;
+		margin-bottom: 10px;
+		background: #fff;
+		border-radius: 8px;
+		.list-left {
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			flex-shrink: 0;
+			margin-right: 10px;
+		}
+		.list-right {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			.list-top {
+				display: flex;
+				justify-content: space-between;
+				.list-top-left {
+					display: flex;
+					flex-direction: column;
+					p {
+						text-align: left;
+						font-size: 15px;
+						color:#6C6E6C;
+						line-height: 20px;
+						strong {
+							font-weight: 600;
+							color: #313231;
+						}
+					}
+				}
+				button {
+					width: 62px;
+					height: 26px;
+					border-radius: 20px;
+					background: #BEC0BD;
+					color: #fff;
+					font-size: 12px;
+					border: none;
+					outline: none;
+					&.active {
+						background: #4B594A;
+					}
+				}
+			}
+			.list-bottom {
+				width: 100%;
+				height: 16px;
+				background: #F5F5F5;
+				border-radius: 8px;
+				margin-top: 6px;
+				position: relative;
+				p {
+					width: 100%;
+					background: radial-gradient(100% 125.11% at 0% 50%, #CD9D00 0%, #FFE591 100%);
+					height: 100%;
+					position: absolute;
+					top: 0;
+					left: 0;
+					border-radius: 8px;
+				}
+				span {
+					font-size: 11px;
+					display: flex;
+					line-height: 16px;
+					height: 100%;
+					position: absolute;
+					right: 10px;
+					z-index: 1;
+					color: #6C6E6C;
+				}
+			}
+		}
+	}
 }
 </style>
