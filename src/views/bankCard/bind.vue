@@ -143,8 +143,6 @@ import {
   getUserAndOneBankApi,
   bankCardAttribution,
 } from "@/api/member";
-import FastClick from 'fastclick';
-
 export default {
   name: "Team",
   data() {
@@ -424,21 +422,7 @@ export default {
   created() {
     this.getRealName();
   },
-  mounted() {
-    // 初始化 FastClick
-    FastClick.attach(document.body);
-    // 禁用 FastClick 对输入框的处理
-    FastClick.prototype.focus = function(targetElement) {
-      let length;
-      if (targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
-        length = targetElement.value.length;
-        targetElement.focus();
-        targetElement.setSelectionRange(length, length);
-      } else {
-        targetElement.focus();
-      }
-    };
-  },
+  mounted() {},
   methods: {
     handleTab(it) {
       if (it.id != this.activeIndex) {
@@ -868,6 +852,71 @@ export default {
       svg {
         color: #fff;
       }
+    }
+  }
+
+  .list-news {
+    background-color: #fff;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    min-height: 100px;
+    position: relative;
+
+    .left {
+      width: 100%;
+      img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+    }
+
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100px;
+      padding: 8px 0;
+    }
+
+    .item1 {
+      text-align: right;
+      margin-top: auto;
+      padding-top: 8px;
+      .year {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+
+    .item2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 8px;
+    }
+
+    .item3 {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 8px;
     }
   }
 }
