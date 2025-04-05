@@ -43,7 +43,7 @@
         </template>
       </van-tabbar-item>
 
-      <van-tabbar-item name="share" to="/fund-pro">
+      <van-tabbar-item name="share" to="/team">
         <span style="font-size: 14px">团队</span>
         <template #icon="props">
           <img

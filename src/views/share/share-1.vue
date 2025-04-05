@@ -5,7 +5,7 @@
 		
 	<div class="top">
 		<div class="user-logo">
-			<img src="@/assets/photo/user-logo.png"  style="visibility: hidden;"/>
+			<img src="@/assets/photo/user-logo.png" />
 		</div>
 	</div>
 	
