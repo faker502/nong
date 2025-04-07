@@ -73,7 +73,7 @@ export default {
     },
     bgColor: {
       type: String,
-      default: "#abb187",
+      default: '#F2F6D4'// "#abb187",
     },
   },
   data() {

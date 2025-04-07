@@ -166,7 +166,7 @@ body {
 #app {
   overflow: visible;
   height: 100% !important;
-  background: #fffcef !important;
+  background: #f3f3f3 !important;
 }
 
 .dialog-error {

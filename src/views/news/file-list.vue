@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="part_1">
-      <nav-bar :title="title" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
+      <nav-bar :title="'政策文件'" titleColor='#313231' leftIconColor="#313231" class="nav-top"/>
     </div>
     <div class="container">
 
@@ -13,9 +13,12 @@
 		  <van-list class="list-content" v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset='50'>
 		    <div class="list_td" v-for="it in billList" :key="it.noticeId" @click="$router.push('/news/info?noticeId=' + it.noticeId)">
 		      <div class="left">
+            <!-- <img src="@/assets/photo/file.png" /> -->
+             <img src="@/assets/photo/file.png" />
 		        <div class="item-1" style="line-height: 24px;width: 100%;">{{ it.noticeTitle }}</div>
-		        <div class="item3" v-show="it.intro">{{ it.intro }}</div>
-		        <div class="item4">
+            <van-icon name="arrow" />
+		        <!-- <div class="item3" v-show="it.intro">{{ it.intro }}</div> -->
+		        <!-- <div class="item4">
 					
 					<div class="file">
 						{{ it.remark }}
@@ -27,7 +30,7 @@
 					
 					
 					
-				</div>
+				</div> -->
 		      </div>
 		      <div class="right">		        
 		        <span></span>
@@ -110,6 +113,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ ::v-deep .nav-top .van-icon:before {
+      background: #fff !important;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 .svg-icon{
   padding-right: 10px;
   vertical-align: middle;
@@ -186,7 +198,9 @@ export default {
   .container {
     width: 100%;
     height: 168px;
-    background-image: url('@/assets/photo/top2.webp');
+    // background-image: url('@/assets/photo/top2.webp');
+    background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+
 	//background-color: #a9ae8a;
     background-size: 100% 100%;
     .data_tabs {
@@ -217,14 +231,16 @@ export default {
       padding-top: 10px;
       .list {
         margin: 10px 0;
-		margin-top: 70px;
+		    margin-top: 44px;
         //background: $bg_color;
         font-size: 16px;
         color: $font_color1;
 		text-align: center;
 		.van-list {
 		    width: 95%;
-		    background: #fff;
+		    // background: #fff;
+        background: #FFFFFF6B;
+
 		    margin: 0 auto;
 		    border-radius: 4px;
 		}
@@ -446,26 +462,46 @@ export default {
 
         .list-content{
 			margin-top: 0px;
+      padding: 8px 0;
           .list_td{
-            margin: 15px 5px;
-            border-bottom: 1px solid #EDEDF1;
+            // margin: 15px 5px;
+            // border-bottom: 1px solid #EDEDF1;
+            // padding: 8px 12px!important;
+            padding: 0 12px;
           }
           .left,.right{
             display: inline-block;
           }
           .left{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
             text-align: left;
             line-height: 24px;
             vertical-align: middle;
-			min-height: 48px;
+			      min-height: 48px;
+            img {
+              width: 28px;
+              height: 28px;
+              margin-right: 5px;
+            }
             .item-1:nth-child(1){
-              font-size: 14px;
+              font-size: 16px;
               font-weight: 600;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100%;
             }
             .item-1:nth-child(2){
-              font-size: 12px;
-              color: #626571;
+              font-size: 16px;
+              color: #313231;
+              font-weight: 500;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100%;
             }
 			.item3 {			
 						  width: 95%;

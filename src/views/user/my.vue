@@ -65,7 +65,7 @@
 						<img src="@/assets/photo/meeting.png" />
 						<span>会议中心</span>
 					</li>
-					<li>
+					<li @click="$router.push('/file-list')">
 						<img src="@/assets/photo/files.png" />
 						<span>政策文件</span>
 					</li>

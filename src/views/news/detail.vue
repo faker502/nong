@@ -1,6 +1,6 @@
 <template>
     <div class="PolicyInfo">
-        <nav-bar :title="title" left-arrow @click-left="onClickLeft" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
+        <nav-bar :title="'政策详情'" left-arrow @click-left="onClickLeft" titleColor='#313231' leftIconColor="#313231" class="nav-top"/>
 		
 
 		
@@ -198,12 +198,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .nav-top .van-icon:before {
+      background: #fff !important;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 .PolicyInfo {
   height: 100%;
   position: relative;
   overflow-y: auto;
   width: 100%;
-  background: url('@/assets/photo/top2.webp') no-repeat top left;
+//   background: url('@/assets/photo/top2.webp') no-repeat top left;
 //background-color: #a9ae8a;
   background-size: 100% 168px;
   
@@ -271,15 +280,17 @@ export default {
 	
 }
 .top-content {
-    width: 95%;
+    // width: 95%;
     display: flex;
     flex-direction: column;
     margin-top: 50px;
-	background: #fff;
+	// background: #fff;
+	background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	margin: 0 auto;
-	margin-top: 80px;
+	// margin-top: 44px;
+	padding-top: 44px;
 }
 
 .top-content-title {
@@ -287,7 +298,7 @@ export default {
     text-align: center;
     font-size: 18px;
     font-weight: 400;
-    margin: 0.8rem auto;
+    margin: 20px auto;
     line-height: 30px;
 }
 
@@ -305,7 +316,7 @@ export default {
     width: 95%;
     line-height:24px;
     font-size: 15px;
-	background: #fff;
+	// background: #fff;
 	padding: 0 15px;
 	box-sizing: border-box;
 	//border:1px solid #f00;
