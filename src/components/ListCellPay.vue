@@ -13,7 +13,7 @@
   </div>
   <div class="cell-item" v-else @click.stop="handleClick" :class="checked">
     <div class="cell-item-left">
-      <svg-icon :iconClass="icon" :size="26" />
+      <svg-icon :iconClass="icon" :size="32" />
       <div class="title">{{ title }}</div>
     </div>
     <div class="cell-item-right">
@@ -83,12 +83,16 @@ export default {
   }
   &-left {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    height: 74px;
     .title {
-      color: $font_color1;
+      // color: $font_color1;
+      color: #6C6E6C;
       margin-left: 6px;
-      font-size: 15px;
+      font-size: 14px;
+      margin-top: 10px;
     }
   }
 
@@ -105,6 +109,20 @@ export default {
 .actived{
   //background: url('@/assets/img/selected2.png');
   //background-size: 100% 100%;
-  border:2px solid #b0be6b;
+  // border:2px solid #b0be6b;
+  border: 1px solid #7E963C;
+  // border-image-source: linear-gradient(180deg, #7E963C 0%, #455117 100%);
+  background: linear-gradient(180deg, #FCFFF3 0%, #EAF4DC 100%);
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 18px;
+    background: url('@/assets/photo/pay-selected.png');
+    background-size: 100% 100%;
+  }
 }
 </style>
