@@ -238,6 +238,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .nav-top .van-icon:before {
+      background: #fff !important;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 .svg-icon {
   padding-right: 10px;
   vertical-align: middle;

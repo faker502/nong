@@ -164,13 +164,13 @@ const routes = [
 	    path: "balance",
 	    name: "myBalance",
 	    component: () => import("@/views/user/balance.vue"),
-	    meta: { title: "余额明细", tabbar: true },
+	    meta: { title: "余额明细" },
 	  },
 	  {
 	    path: "fund-list",
 	    name: "myBalance2",
 	    component: () => import("@/views/user/fund-list.vue"),
-	    meta: { title: "专项基金明细", tabbar: true },
+	    meta: { title: "专项基金明细" },
 	  },
 	  {
 	    path: "rmb",
