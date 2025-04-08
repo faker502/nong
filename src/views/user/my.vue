@@ -404,8 +404,8 @@
       position="bottom"
       :style="{ height: '30%' }"
     >
-      <div class="lingqu-title">退出登录</div>
-      <div class="lingqu-tips">是否在该设备退出登录？</div>
+      <div class="lingqu-title">温馨提示</div>
+      <div class="lingqu-tips">是否退出当前登录？</div>
       <div class="lingqu-bottom">
         <div class="lingqu-button cancle" @click="showLogout = false">取消</div>
         <div class="lingqu-button" @click="loginOut">确认</div>
@@ -416,7 +416,7 @@
       use-slot
       v-model="showLogout"
       cancel-button-text="取消"
-      confirmButtonText="确定"
+      confirmButtonText="退出"
       show-cancel-button
       @confirm="loginOut"
       @cancel="showLogout = false"
@@ -439,7 +439,7 @@
             padding: 10px;
           "
         >
-          退出登录
+          温馨提示
         </div>
         <div
           style="
@@ -449,7 +449,7 @@
             padding: 10px;
           "
         >
-          是否在该设备退出登录
+          是否退出当前登录？
         </div>
       </div>
     </van-dialog>
@@ -1902,17 +1902,45 @@ export default {
 
   .van-dialog {
     border-radius: 8px;
+    background: #F6FEF2;
+    ::v-deep .van-hairline--top {
+      border-top: none;
+      padding-bottom: 16px;
+    }
   }
 
   .van-dialog__cancel {
     display: inline-block !important;
+  }
+  ::v-deep .van-dialog .van-button--default {
+    background: #F6FEF2;
+    color: #4B594A;
+    // border: 1px solid #4B594A;
+    border-radius: 33px;
+    // margin: 16px;
+    box-sizing: border-box;
+    .van-button__text {
+      padding: 0;
+      border: 1px solid #4B594A;
+      width: 90%;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 18px;
+      color: #4B594A;
+    }
+    &.van-dialog__confirm {
+        .van-button__text {
+          color:#fff;
+          background: #4B594A;
+        }
+    }
   }
   ::v-deep .van-dialog__cancel {
     display: inline-block !important;
   }
 
   ::v-deep .van-hairline--top {
-    border-top: rgba(172, 32, 35, 0.06) 1px solid;
+    // border-top: rgba(172, 32, 35, 0.06) 1px solid;
   }
 }
 </style>

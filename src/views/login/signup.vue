@@ -1,7 +1,7 @@
 <template>
   <div class="page">
 	  
-	 <nav-bar title="" leftIconColor="#666" class="nav-top"/>
+	 <nav-bar title="" leftIconColor="#313231" class="nav-top"/>
 	  
     <div class="container">
 
@@ -15,9 +15,9 @@
       </div>-->
 
        <div class="lg_top">
-        <div class="bg-top"></div>
+        <div class="bg-top">欢迎注册！</div>
         <div class="logo">
-         <img src="@/assets/photo/logo-alt.webp" style="width:259px;height: 220px;"/>
+          注册账号即可参与更多助农活动
         </div>
       </div>
 
@@ -27,7 +27,7 @@
 		  
 		  <div class="data_tabs df_r">
 			<div class="data_tab " @click="$router.push('/login')">用户登录</div>
-			<div class="data_tab tab_active" >立即注册</div>
+			<div class="data_tab tab_active" ><span>立即注册</span></div>
 		  
 		  
 
@@ -38,7 +38,7 @@
         <div class="reg_form animate__fadeInRight">
           <van-form ref="rform" class="rform">
             <div v-if="next">
-				<div class="label">手机号</div>	
+				<!-- <div class="label">手机号</div> -->	
                 <van-field
 					:label-width="60" label="+86"
                   v-model="rform.phone"
@@ -57,35 +57,37 @@
             
 
 
-            <div class="d_line"></div>
+            <!-- <div class="d_line"></div> -->
 			
-			<div class="label">密码</div>	
+			<!-- <div class="label">密码</div> -->	
             <van-field
               v-model="rform.password"
               placeholder="设置登录密码"
-              
               autocomplete="off"
               :border="false"
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               :rules="rules.password"
+              right-icon="eye-o"
+              @click-right-icon="showPassword = !showPassword"
             >
             </van-field>
-            <div class="d_line"></div>
+            <!-- <div class="d_line"></div> -->
 			
-			<div class="label">确认密码</div>
+			<!-- <div class="label">确认密码</div> -->
             <van-field
               v-model="rform.password2"
               placeholder="请再次输入登录密码"
-              
               autocomplete="off"
               :border="false"
-              type="password"
+              :type="showPassword2 ? 'text' : 'password'"
               :rules="rules.password2"
+              right-icon="eye-o"
+              @click-right-icon="showPassword2 = !showPassword2"
             >
             </van-field>
-            <div class="d_line"></div>
+            <!-- <div class="d_line"></div> -->
 			
-			<div class="label">QQ</div>
+			<!-- <div class="label">QQ</div> -->
 			<van-field
 			  v-model="rform.qq"
 			  placeholder="选填：请输入QQ号码"			  
@@ -94,10 +96,10 @@
 			  type="number"			  
 			>
 			</van-field>
-			<div class="d_line"></div>
+			<!-- <div class="d_line"></div> -->
 			
             <template>
-				<div class="label">图形验证</div>
+				<!-- <div class="label">图形验证</div> -->
               <div class="send_email df_r">
 				  
                 <van-field
@@ -116,11 +118,11 @@
               </div>
             </template>
 			
-			<div class="d_line"></div>
+			<!-- <div class="d_line"></div> -->
 			
 			
           <template v-if="regSmsSwitch == 1">
-			  <div class="label">短信验证</div>
+			  <!-- <div class="label">短信验证</div> -->
               <div class="send_email df_r" >
 				  
                 <van-field
@@ -140,8 +142,8 @@
               </div>
             </template>
 
-            <div class="d_line"></div>
-			<div class="label">邀请码</div>
+            <!-- <div class="d_line"></div> -->
+			<!-- <div class="label">邀请码</div> -->
             <van-field
               v-model="rform.code"
 
@@ -169,7 +171,7 @@
                 :rules="rules.realName"
               >
               </van-field>
-              <div class="d_line"></div>
+              <!-- <div class="d_line"></div> -->
               <van-field
                 v-model="rform.idCard"
 
@@ -191,13 +193,11 @@
             <div>
               <van-button 
                   class="btn2"
-                  color="rgba(157, 164, 112, 0.12)"
+                  :disabled="!isFormValid"
                   @click="handleToReg()"
                   >注册
               </van-button>
             </div>
-
-
           </div>
         </div>
 	
@@ -207,9 +207,16 @@
 	  
 	  
 	  
-	  <div class="online df_r">
+	  <!-- <div class="online df_r">
 	      <div class="" style="font-size:18px;" @click="$router.push('/online')">在线客服</div>
-	  </div>
+	  </div> -->
+    <div class="customer-service" @click="$router.push('/online')">
+      <p class="service-text">
+        账号遇到问题？
+        <span class="highlight">人工客服</span>
+        解决
+      </p>
+    </div>
 	  
 <!-- 	  <div class="tips df_r">
 	      <a href="javascript:void(0);" style="color:#919191"> 
@@ -292,11 +299,20 @@ export default {
           { required: true, message: "", trigger: 'blur' },
           { pattern: /(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: "请填写正确的身份证号码", trigger: 'blur' },
         ],
-      }
+      },
+      showPassword: false,
+      showPassword2: false,
     };
   },
   computed: {
     ...mapGetters(["baseData"]),
+    isFormValid() {
+      return this.rform.phone && 
+             this.rform.password && 
+             this.rform.password2 && 
+             this.rform.imgCode && 
+             this.rform.code;
+    }
   },
   mounted() {
     if (this.$route.query.code) {
@@ -423,370 +439,295 @@ export default {
 .page {
   height: 100%;
   position: relative;
+  background: url("@/assets/photo/logo-alt.png") no-repeat left top;
+  display: flex;
+  flex-direction: column;
+  
   .container {
+    text-align: center;
+    // flex: 1;
+    // display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
 
-.tips {
-	  	position: relative;
-	    bottom: 10px !important;
-	    justify-content: center;
-	    font-size: 14px;
-	    line-height: 40px;
-	  height: 40px;
-	    width: 97%;
-	    .img-icon {
-	      height: halfSize(34px);
-	    }
-	  }
-	  .online {
-	  	position: relative;
-	  	padding-bottom: 40px;
-	  	justify-content: center;
-	  	font-size: 14px;
-	  	line-height: 40px;
-	  height: 40px;
-	  	width: 95%;
-		background: #fff;
-		margin: 0 auto;
-		color:#94ac01;
-	  }
-
-	//background: linear-gradient(180deg, rgba(163,74,78,1) 0%, rgba(163,74,78,1) 30%, rgba(255,255,255,1) 61%);
-    //overflow-y: auto;
-    height: 100%;
     .lg_top {
-      // position: relative;
-      // width: 50%;
-      // height: halfSize(205px);
-      // margin: 0px auto 0;
-
-
-      .bg-top{
-          /*height: halfSize(380px);
-          background: no-repeat center top / 100% 100%;
-          background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)), url("@/assets/img/bg.jpg");
-          background-size: 100% 100%;
-          position: relative;*/
-          // opacity: 0.4;
-        }
-
-
-    .logo {
-      position: relative;
-      top: 50px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 320px;
-	  text-align: center;
-      img {
-        width: 100%;
-        height: 100%;
-        //object-fit: contain;
-      }
-    }
-
-      .reg-title{
-        font-size: 24px;
+      height: 165px;
+      background: url("@/assets/photo/logo-top.png") no-repeat right bottom;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 20px;
+      color: #1E2831;
+      .bg-top {
+        font-size: 32px;
         font-weight: 600;
-        color: #121212;
-        div:nth-child(2){
-          background-color: rgb(239,185,183);
-          padding: 2px 30px;
-          height: 16px;
-          opacity: 0.6;
-          width: 0px;
-          margin-top: -9px;
-          letter-spacing: 8px;
-        }
-      }
-      .reg-title-2{
-        padding: 12px 0;
-        font-size: 14px;
-        color: #999999;
-        span{
-          color: #AC2023;
-          font-weight: 600;
-          font-size: 17px;
-          letter-spacing: 3;
-        }
+        margin-top: 54px;
       }
     }
+    .logo {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
     .form_wrap {
-		background-color: #fff;
+      background: #FFFFFF6B;
       justify-content: center;
-      padding: 0 0 20px 0;
-	  //box-shadow: 0px -2px 12px 0px #E7001214;
-	  //border:1px solid #f00;
-	  margin: 0 auto;
-	  margin-top: -10px;
-	  position: relative;
-	  z-index:20;
-	  width: 95%;
-	  box-sizing: border-box;
-	text-align: left;
-	  
-	  .data_tabs {
-	      width: 100%;
-	      margin: 0 auto;
-	      margin-top: -10px;
-	      display: flex;
-	      flex-direction: row;
-	      align-items: flex-start;
-	      height: 45px;
-	      justify-content: space-between;
-	      flex: none;
-	      order: 0;
-	      flex-grow: 1;
-	    }
-	    .data_tab {
-	      display: flex;
-	      flex-direction: row;
-	      justify-content: center;
-	      align-items: center;
-	      text-align: center;
-	      font-size: 16px;
-	      
-	        background: #e1dfd9;
-	  		
-	      color: #fff;
-	    border-top-left-radius:5px;
-	    border-top-right-radius:5px;
-	      padding: 10px 0;
-	      height:26px;
-	    width: 50%;
-	    }
-	  		
-	    .tab_active {
-	      color:#fff;
-	      font-weight: 600;
-	      font-size: 16px;
-	      display: flex;
-	      flex-direction: row;
-	      justify-content: center;
-	      align-items: center;
-	      gap: 10px;
-	      //background: linear-gradient(180deg, #EE6863 0%, #D11A2D 100%);
-	      background: linear-gradient(135deg, #AAB086 0%, #D8DFB5 100%);
-	  
-	    }
-	  
-	  .grid {
-	  		  
-	    display: grid;
-	    grid-template-columns: repeat(2, 1fr);
-	    grid-gap: 50px;
-	    padding-top:10px;
-	    margin: 30px auto 20px;
-	  		font-size: 19px;
-	  		
-	  		line-height: 22px;
-	  		text-align: center;
-	  		.home-item {
-	  			padding: 8px 13px;
-	  			text-align: center;
-	  			border:none;
-	  			color: #3F3D38;
-	  			font-weight: 600;
-	  			span.active  {border-bottom: 3px solid #a8ad89;padding-bottom: 5px;}
-	  			 span.no-active {border:none; padding-bottom: 5px; color:#999; font-weight:normal;}
-	  		}
-	  }
-      .title {
-        color: $font_color;
-        text-align: center;
-        font-size: 12px;
+      padding: 0 0 16px 0;
+      margin: 0 auto;
+      margin-top: -10px;
+      position: relative;
+      z-index: 20;
+      width: 95%;
+      box-sizing: border-box;
+      text-align: left;
+      border-radius: 8px;
+
+      .data_tabs {
+        background: #fff;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: -10px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        height: 48px;
+        justify-content: space-between;
+        flex: none;
+        order: 0;
+        flex-grow: 1;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        overflow: hidden;
       }
-      .rform {
-        margin: 25px 15px 10px 15px;
-        		//background-color: #3F3D38;
-        		text-align: left;
-        		
-        		.van-cell {
-        			border-bottom: 1px solid #f8ebe6;
-        		}
-        		
-        .label {
-        		width: 130px;
-        		font-size: 15px;
-        		color: #A7AF78;
-        		margin:20px 0 5px 0;
-        		text-align: left;
+      .data_tab {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 16px;
+        background: #fff;
+        color: #BEC0BD;
+        padding: 10px 0;
+        height: 26px;
+        width: 50%;
+      }
+
+      .tab_active {
+        color: #fff;
+        background-color: #fff;
+        font-weight: 600;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background: url("@/assets/photo/tab_active.png") no-repeat center center;
+        background-size: 100% 100%;
+        transform: scaleX(-1);
+        
+        span {
+          transform: scaleX(-1);
         }
-		
-		
-		      
-		
+      }
+
+      .rform {
+        // margin: 25px 0 10px 0;
+        padding: 24px 16px;
+        text-align: left;
+
+        .van-cell {
+          height: 44px;
+          line-height: 44px;
+          padding: 0 10px;
+          border: none;
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+        }
+
+        .input-type {
+          ::v-deep .van-field__control {
+            height: 44px;
+            line-height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 4px;
+          }
+          
+          ::v-deep .van-field__label {
+            display: none;
+          }
+        }
+
         .d_line {
           height: 15px;
-        }
-        .sign-up-tips{
-          margin: 0 16px;
-          color: red;
-          font-size: 15px;
-          padding-bottom: 50px;
-          line-height: 24px;
-        }
-        .forget {
-          color: $font_color;
-          font: normal normal normal 15px Yuanti SC;
-          padding:10px 0 0 0;
-          height: 40px;
-          align-items: center;
-          .activeIcon,
-          .inactiveIcon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: $bg_color;
-            border: 2px solid #419DF4;
-          }
-          .activeIcon {
-            span {
-              display: block;
-              position: relative;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 12px;
-              height: 12px;
-              background: $bg_color_b;
-              border-radius: 50%;
-            }
-          }
-          .to_login {
-            width: 100%;
-            text-align: right;
-            color: #585858;
-          }
-        }
-        .p_box {
-          align-items: center;
         }
       }
     }
 
     .btns {
-      width: auto;
-      margin: 10px;
-	  margin-top: 0;
+      width: 100%;
+      // margin: 0 16px;
+      margin-top: 0;
+      padding: 0 16px;
+      box-sizing: border-box;
+      display: flex;
       justify-content: space-around;
-	  height: 50px;
-	  margin-top: 15px;
-      .btn,.btn2 {
-		width: 100%;
-		border-radius: 4px;
-		
-		color: #94ac01 !important;
-		background: rgba(157, 164, 112, 0.12);
-							  border: 1.5px solid #94ac01;
-							  font-weight: 600;
+
+      .btn2 {
+        width: 100%;
+        color: #fff;
+        
+        .van-button {
+          width: 100%;
+          height: 40px;
+          line-height: 40px;
+          border-radius: 20px;
+          font-size: 16px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #4B594A;
+          color: #fff;
+          border: none;
+          
+          &:disabled {
+            background: #CCCCCC;
+            color: #999;
+            pointer-events: none;
+          }
+        }
       }
-    }
-    .lb_box {
-      padding: 15px 20px;
-      justify-content: space-between;
-      /*color: $font_color_b;*/
-       color:#999999;
-      font-size: 16px;
-      font-weight: 600;
     }
 
     .send_email {
       align-items: center;
-	  height: 65px;
+      height: 65px;
+      // margin-bottom: 24px;
+      position: relative;
       .e_code {
         margin-left: 10px;
         width: 105px;
         .van-button {
           height: 40px;
           background: linear-gradient(180deg, #5db1ff 0%, #0070d9 100%);
-          /* border: 1px solid $base_border_color;*/
         }
       }
       .van-count-down {
         color: $font_color_white;
         font-size: 13px;
       }
-     .capcat_code {
+      .capcat_code {
+        top: 0;
         position: absolute;
-        right: 7px;
-		width: 120px;
-		height: 40px;
-		display: inline-block;
-		margin-left: 2px;
-		img {height: 40px;width:110px;}
+        right: 0px;
+        width: 120px;
+        height: 40px;
+        display: inline-block;
+        // margin-left: 2px;
+        img {
+          height: 100%;
+          width: 120px;
+        }
       }
       .phone_code {
-		position: absolute;
+        position: absolute;
         width: 140px;
         right: 0;
-		display: inline-block;
-			.van-button {
-			    width: 130px;
-			    height: 60px;
-			    padding: 0;
-			    margin: 20px 0 20px 2px;
-			    font-size: 17px;
-			    display: inline-block;
-				color:#A7AF78;
-				letter-spacing: 2px;
-				
-				background: none;
-				border: none;
-				font-weight: 500;
-				//border-bottom: 1px solid #A7AF78;
-			}
-			.van-button__content {
-				font-size: 14px;
-			}
-			.van-button--default {
-				//background:linear-gradient(180deg,#e9e9e9,#ddd);
-				color:#999;
-			}
+        display: inline-block;
+        .van-button {
+          width: 130px;
+          height: 44px;
+          padding: 0;
+          margin: 0;
+          font-size: 16px;
+          display: inline-block;
+          color: #A7AF78;
+          letter-spacing: 2px;
+          background: none;
+          border: none;
+          font-weight: 500;
+        }
+        .van-button__content {
+          font-size: 14px;
+        }
+        .van-button--default {
+          color: #999;
+        }
       }
     }
   }
 }
-::v-deep .van-field__error-message{
+
+.customer-service {
+  position: relative;
+  padding: 20px 0;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 40px;
+  width: 97%;
+  margin-top: auto;
+  text-align: center;
+  
+  .service-text {
+    font-size: 14px;
+    color: #313231;
+    line-height: 20px;
+    
+    .highlight {
+      color: #7E963C;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+  }
+}
+
+::v-deep .van-field__error-message {
   font-size: 15px;
 }
 
-::v-deep .reg_form{
+::v-deep .reg_form {
   input.van-field__control {
-      color: $font_color;
-      height: 100%;
-      font-size: 16px;
-    }
-}
-::v-deep .tips {
-  .van-radio__label {
-    color: $font_color2;
-    font-size:14px
+    color: $font_color;
+    height: 100%;
+    font-size: 16px;
   }
 }
+
 ::v-deep .van-button {
   width: 100%;
-  height: 48px;
+  height: 44px;
   padding: 0;
   margin: 20px 0;
-  border-radius: 8px;
-  font-size: 15px;
-  display:block;
+  border-radius: 22px;
+  font-size: 16px;
+  display: block;
 }
+
 ::v-deep .btn2 .van-button {
   width: 100%;
-  height: 48px;
+  height: 44px;
   padding: 0;
   margin: 0;
-  border-radius: 8px;
-  font-size: 15px;
-  display:block;
+  border-radius: 4px;
+  font-size: 16px;
+  display: block;
+  background: #4B594A;
+  color: #fff;
+  font-weight: 600;
+  border: none;
 }
-::v-deep .van-button__content{
-  font-size:18px;
+
+::v-deep .van-button__content {
+  font-size: 16px;
 }
+
 .w_white {
   color: #fff;
 }
