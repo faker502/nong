@@ -1,49 +1,58 @@
 <template>
   <div class="page">
     <div class="part_1">
-      <nav-bar :title="title" titleColor='#fff' leftIconColor="#fff" class="nav-top"/>
+      <nav-bar
+        :title="title"
+        titleColor="#fff"
+        leftIconColor="#fff"
+        class="nav-top"
+      />
     </div>
     <div class="container">
-
       <div class="wrap">
-		  
         <div class="list">
           <div class="fund-total" v-if="active == 4">
-            
-			<div class="detail-1" style="display:none;">
-			  <div class="detail-2">
-				  <div class="flex-item">
-					  <p class="text">充值余额:</p>
-					  <p class="gold">{{ account.rechargeOver }}</p>
-				  </div>
-				  <div class="flex-item">
-					  <div class="v-btn">
-					  <van-button @click="$router.push({ path: '/withdraw' });" type="default">提现</van-button>
-  
-					  </div>
-				  </div>
-			</div>
-			
-			
-			
-			
-			</div>
-      
+            <div class="detail-1" style="display: none">
+              <div class="detail-2">
+                <div class="flex-item">
+                  <p class="text">充值余额:</p>
+                  <p class="gold">{{ account.rechargeOver }}</p>
+                </div>
+                <div class="flex-item">
+                  <div class="v-btn">
+                    <van-button
+                      @click="$router.push({ path: '/withdraw' })"
+                      type="default"
+                      >提现</van-button
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="fund-recharge" v-else-if="active == 5">
-            
-          </div>
+          <div class="fund-recharge" v-else-if="active == 5"></div>
           <div v-if="active == 2">
-            <van-list class="list-content" v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset='50'>
-              <div class="list_td"  v-for="it in billList" :key="it.id">
+            <van-list
+              class="list-content"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="onLoad"
+              :offset="50"
+            >
+              <div class="list_td" v-for="it in billList" :key="it.id">
                 <div class="left">
-                  <div class="item-1" style="line-height: 24px;width: 125%;">{{ it.remark }}</div>
-                  <div class="item-1" style="line-height: 24px;">{{ it.create_time }}</div>
+                  <div class="item-1" style="line-height: 24px; width: 125%">
+                    {{ it.remark }}
+                  </div>
+                  <div class="item-1" style="line-height: 24px">
+                    {{ it.create_time }}
+                  </div>
                 </div>
-                <div class="right">
-                  +{{it.number}}
+                <div class="right">+{{ it.number }}</div>
+                <div class="remark" v-if="it.remark2">
+                  备注：{{ it.remark2 }}
                 </div>
-                <div class="remark" v-if="it.remark2">备注：{{ it.remark2 }}</div>
               </div>
             </van-list>
             <!-- <div v-if="list.length > 0"> -->
@@ -59,17 +68,30 @@
                 <!-- <p>{{ account.gold }}</p> -->
               </div>
             </div>
-            <van-list class="list-content" v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset='50'>
+            <van-list
+              class="list-content"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="onLoad"
+              :offset="50"
+            >
               <div class="list_td" v-for="it in billList" :key="it.id">
                 <div class="left">
-                  <div class="item-1" style="line-height: 24px;width: 125%;">{{ it.remark }}</div>
-                  <div class="item-1" style="line-height: 24px;">{{ it.create_time }}</div>
+                  <div class="item-1" style="line-height: 24px; width: 125%">
+                    {{ it.remark }}
+                  </div>
+                  <div class="item-1" style="line-height: 24px">
+                    {{ it.create_time }}
+                  </div>
                 </div>
                 <div class="right">
                   <span v-if="it.number > 0">+{{ it.number }}</span>
                   <span v-else>{{ it.number }}</span>
                 </div>
-                <div class="remark" v-if="it.remark2">备注：{{ it.remark2 }}</div>
+                <div class="remark" v-if="it.remark2">
+                  备注：{{ it.remark2 }}
+                </div>
               </div>
               <!-- 
               <div class="list_td">
@@ -122,8 +144,8 @@ import { getBillApi, getAccountApi } from "@/api/member";
 export default {
   data() {
     return {
-      title: '充值余额明细',
-      accountTitle: '',
+      title: "充值余额明细",
+      accountTitle: "",
       active: 4,
       billList: [],
       account: [],
@@ -132,11 +154,10 @@ export default {
       pageNum: 1,
       totalPage: 0,
       total: 0,
-      tips: false
+      tips: false,
     };
   },
   mounted() {
-   
     //this.active = 3
     //console.log(this.active);
     this.getList();
@@ -159,76 +180,82 @@ export default {
       });
     },
     getList() {
-      let that = this
-      getBillApi({ type: parseInt(this.active), pageNum: that.pageNum }).then((res) => {
-        if (res.code != 200) {
-          this.$dialog({ message: '请求失败', className: 'dialog-error' })
-          return false;
-        }
-        if (that.pageNum == 1) {
-          that.billList = res.data.data;
-          that.ymList = res.data.data;
-          that.numberList = res.data.data;
-        } else {
-          that.billList = that.billList.concat(res.data.data);
-          that.ymList = that.ymList.concat(res.data.data)
-          that.numberList = that.numberList.concat(res.data.data)
-        }
+      let that = this;
+      getBillApi({ type: parseInt(this.active), pageNum: that.pageNum }).then(
+        (res) => {
+          if (res.code != 200) {
+            this.$dialog({ message: "请求失败", className: "dialog-error" });
+            return false;
+          }
+          if (that.pageNum == 1) {
+            that.billList = res.data.data;
+            that.ymList = res.data.data;
+            that.numberList = res.data.data;
+          } else {
+            that.billList = that.billList.concat(res.data.data);
+            that.ymList = that.ymList.concat(res.data.data);
+            that.numberList = that.numberList.concat(res.data.data);
+          }
 
-        that.loading = false;
-        that.pageNum++
-        //最后一次请求返回的数据为空或小于10条，不在请求，finished = true
-        //根据业务需求更改
-        //if (res.data.billList.length == 0 || res.data.billList == null || res.data.billList.length < 10) {
-        if (that.pageNum > res.data.last_page) {
-          that.finished = true
-          return
+          that.loading = false;
+          that.pageNum++;
+          //最后一次请求返回的数据为空或小于10条，不在请求，finished = true
+          //根据业务需求更改
+          //if (res.data.billList.length == 0 || res.data.billList == null || res.data.billList.length < 10) {
+          if (that.pageNum > res.data.last_page) {
+            that.finished = true;
+            return;
+          }
         }
-      })
+      );
     },
     onLoad() {
-        if (this.pageNum == 1){
-            return 
-        }
-        this.getList();
+      if (this.pageNum == 1) {
+        return;
+      }
+      this.getList();
     },
     tipsShow(v) {
-      v == 1 ? this.tips = true : this.tips = false;
+      v == 1 ? (this.tips = true) : (this.tips = false);
       return false;
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.svg-icon{
+.svg-icon {
   padding-right: 10px;
   vertical-align: middle;
 }
-.van-icon-passed::before{
+.van-icon-passed::before {
   color: #038310;
 }
-.van-icon-close::before{
-  color: #FE6161;
+.van-icon-close::before {
+  color: #fe6161;
 }
-.van-icon-underway-o::before{
-  color: #2F6DB3;
+.van-icon-underway-o::before {
+  color: #2f6db3;
 }
-::v-deep .van-dialog__cancel .van-button__content .van-button__text{
+::v-deep .van-dialog__cancel .van-button__content .van-button__text {
   background-color: #ffffff;
 }
-::v-deep .van-dialog__footer button:nth-child(1) .van-button__content .van-button__text{
+::v-deep
+  .van-dialog__footer
+  button:nth-child(1)
+  .van-button__content
+  .van-button__text {
   background-color: #ffffff;
-} 
+}
 .page {
   height: 100%;
   position: relative;
   overflow-y: auto;
   width: 100%;
-  background: url('@/assets/photo/top2.webp') no-repeat top left;
+  background: url("@/assets/photo/top2.webp") no-repeat top left;
   //background-color: #a9ae8a;
   background-size: 100% 168px;
-  
+
   .part_1 {
     position: absolute;
     top: 0;
@@ -253,7 +280,7 @@ export default {
       font-size: 16px;
       text-align: center;
       margin: 20px auto;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       box-sizing: border-box;
       padding: 10px;
       border-radius: 10px;
@@ -272,7 +299,6 @@ export default {
         }
 
         .name {
-          
         }
       }
 
@@ -288,25 +314,25 @@ export default {
     margin-top: 65px;
     .data_tabs {
       width: 100%;
-      background-color:#fff;
+      background-color: #fff;
       overflow-x: auto;
       box-sizing: border-box;
       padding: 15px 20px;
-      .data_tab{
+      .data_tab {
         flex-shrink: 0;
         padding: 4px 10px;
         font-size: 20px;
-		color:#333;
-		line-height: 40px;
-		.ib {
-			font-weight: bold;
-		}
+        color: #333;
+        line-height: 40px;
+        .ib {
+          font-weight: bold;
+        }
       }
-      .tab_active{
-        color: #AC2023;
-        span{
+      .tab_active {
+        color: #ac2023;
+        span {
           padding-bottom: 8px;
-          border-bottom: 3px solid #AC2023;
+          border-bottom: 3px solid #ac2023;
         }
       }
     }
@@ -315,18 +341,17 @@ export default {
       .list {
         margin: 10px auto;
         background: #fff;
-		width: 95%;	
+        width: 95%;
         font-size: 16px;
         color: $font_color1;
-		text-align: center;
-		border-radius: 5px;
-		padding-bottom: 60px;
-		.van-list {
-		    width: 100%;
-		    background: #fff;
-		    margin: 0 auto;
-		    
-		}
+        text-align: center;
+        border-radius: 5px;
+        padding-bottom: 60px;
+        .van-list {
+          width: 100%;
+          background: #fff;
+          margin: 0 auto;
+        }
         /*.fund-total {
           width: 90%;
           margin: 0 auto;
@@ -387,149 +412,146 @@ export default {
             }
           }
         }*/
-		
-		.detail-1 {
-			box-sizing: border-box;
-			width: 95%;
-			margin: 0 auto;
-			display: inline-block;
-			padding: 10px 20px 10px 30px;
-			//padding-left: 30px;
-			//border:#000 1px solid;
-			background: #fff;
-			border-radius: 4px;
-			
-			.detail-2 {
-				    height: 50px;
-					//border:1px solid #fc0;
-					display: grid;
-					grid-template-columns: 30% 70%;						
-					
-					.flex-item {
-						    display: flex;
-						    flex-direction: column;
-						    justify-content: center;
-						    align-items: center;
-							//border:1px solid #f00;
-							text-align: left;
-							.text {
-								font-size: 12px;
-								color:#626571;
-								
-								font-weight: 400;
-								    display: inline-block;
-								    width: 100%;
-									line-height: 20px;
-							}
-							.gold {
-							
-								font-weight: 600;
-								font-size: 18px;
-								color:#0E2529;
-								display: inline-block;
-								width: 100%;
-								line-height: 30px;
-								span {
-									color:#3F3D38;
-									font-weight: 400;
-									font-size: 12px;
-								}
-							}
-							.v-btn {
-								display: inline-block;
-								width: 100%;
-								text-align: right;
-								.van-button {
-									//background: linear-gradient(180deg, #dbe1ba 0%, #a8ad89 100%);
-									//color:#fff;
-									line-height: 20px;
-									font-weight: 600;
-									font-size: 12px;
-									width: 80px;
-											border-radius: 4px;
-											
-													background: rgba(157, 164, 112, 0.12);
-													border: 1px solid #AAB086;
-													color: #A7AF78;
-													height: 35px;
-											
-								}
-							}
-					}
-			}
-			
-		}	
-		
-        .fund-total-lingqu {
-          /*border:1px solid green;*/
-          .lingqu-left,.lingqu-right{
-            display: inline-block;
-            vertical-align: middle;
-          }
 
-          .lingqu-left{
-                 padding: 10px 10px 10px 8%;
-                 width:45%;
-                 margin:0;
-                 /*border:1px solid red;*/
-                 p:nth-child(1) {
-                    font-size:16px;
-                    padding: 0px 0px 7px 0px;
+        .detail-1 {
+          box-sizing: border-box;
+          width: 95%;
+          margin: 0 auto;
+          display: inline-block;
+          padding: 10px 20px 10px 30px;
+          //padding-left: 30px;
+          //border:#000 1px solid;
+          background: #fff;
+          border-radius: 4px;
 
-                 }
-                 p:nth-child(2) {
-                    font-family: 'DIN Alternate';
-                    color:#929973;
-                    font-size:30px;
-                    font-style: normal;
-                    padding: 0px 0;
-                    line-height: 30px;
-                    span {
-                       font-size:16px;
-                   }
+          .detail-2 {
+            height: 50px;
+            //border:1px solid #fc0;
+            display: grid;
+            grid-template-columns: 30% 70%;
+
+            .flex-item {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              //border:1px solid #f00;
+              text-align: left;
+              .text {
+                font-size: 12px;
+                color: #626571;
+
+                font-weight: 400;
+                display: inline-block;
+                width: 100%;
+                line-height: 20px;
+              }
+              .gold {
+                font-weight: 600;
+                font-size: 18px;
+                color: #0e2529;
+                display: inline-block;
+                width: 100%;
+                line-height: 30px;
+                span {
+                  color: #3f3d38;
+                  font-weight: 400;
+                  font-size: 12px;
                 }
-          }
+              }
+              .v-btn {
+                display: inline-block;
+                width: 100%;
+                text-align: right;
+                .van-button {
+                  //background: linear-gradient(180deg, #dbe1ba 0%, #a8ad89 100%);
+                  //color:#fff;
+                  line-height: 20px;
+                  font-weight: 600;
+                  font-size: 12px;
+                  width: 80px;
+                  border-radius: 4px;
 
-          .lingqu-right {
-            width:43%;
-            padding-left: 0px;
-            font-weight: 600;
-            text-align:right;
-            letter-spacing: 2px;
-            .lingqu-button{
-              float:right;
-              padding: 10px 14px 10px 14px;
-              margin-right:15px;
-              width:  80px;
-              /*border: 2px solid red;*/
-              text-align:center;
-              border-radius: 20px;
-              background-color:#D11A2D;
-              color:#fff;
+                  background: rgba(157, 164, 112, 0.12);
+                  border: 1px solid #aab086;
+                  color: #a7af78;
+                  height: 35px;
+                }
+              }
             }
           }
         }
 
-        .fund-recharge{
-          .list_td{
-            .left{
-              .item-1:nth-child(1){
-                span{
+        .fund-total-lingqu {
+          /*border:1px solid green;*/
+          .lingqu-left,
+          .lingqu-right {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .lingqu-left {
+            padding: 10px 10px 10px 8%;
+            width: 45%;
+            margin: 0;
+            /*border:1px solid red;*/
+            p:nth-child(1) {
+              font-size: 16px;
+              padding: 0px 0px 7px 0px;
+            }
+            p:nth-child(2) {
+              font-family: "DIN Alternate";
+              color: #929973;
+              font-size: 30px;
+              font-style: normal;
+              padding: 0px 0;
+              line-height: 30px;
+              span {
+                font-size: 16px;
+              }
+            }
+          }
+
+          .lingqu-right {
+            width: 43%;
+            padding-left: 0px;
+            font-weight: 600;
+            text-align: right;
+            letter-spacing: 2px;
+            .lingqu-button {
+              float: right;
+              padding: 10px 14px 10px 14px;
+              margin-right: 15px;
+              width: 80px;
+              /*border: 2px solid red;*/
+              text-align: center;
+              border-radius: 20px;
+              background-color: #d11a2d;
+              color: #fff;
+            }
+          }
+        }
+
+        .fund-recharge {
+          .list_td {
+            .left {
+              .item-1:nth-child(1) {
+                span {
                   vertical-align: middle;
                 }
               }
             }
           }
-          .success{
-            background: #E6F0E7;
+          .success {
+            background: #e6f0e7;
             width: 32px;
             height: 32px;
             border-radius: 50%;
             line-height: 32px;
             text-align: center;
           }
-          .faild{
-            background: #FAEBEB;
+          .faild {
+            background: #faebeb;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -537,8 +559,8 @@ export default {
             text-align: center;
             border: none;
           }
-          .wait{
-            background: #EAEFF4;
+          .wait {
+            background: #eaeff4;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -548,38 +570,39 @@ export default {
           }
         }
 
-        .list-content{
-			margin-top: 20px;
-			border-radius: 5px;
-          .list_td{
+        .list-content {
+          margin-top: 20px;
+          border-radius: 5px;
+          .list_td {
             margin: 15px 20px;
-            border-bottom: 1px solid #EDEDF1;
+            border-bottom: 1px solid #ededf1;
           }
-          .left,.right{
+          .left,
+          .right {
             display: inline-block;
           }
-          .left{
+          .left {
             width: 60%;
             text-align: left;
             line-height: 24px;
             vertical-align: middle;
-            .item-1:nth-child(1){
+            .item-1:nth-child(1) {
               font-size: 14px;
               font-weight: 400;
             }
-            .item-1:nth-child(2){
+            .item-1:nth-child(2) {
               font-size: 12px;
               color: #626571;
             }
           }
-          .right{
+          .right {
             width: 40%;
             text-align: right;
             vertical-align: middle;
             font-size: 15px;
             font-weight: 600;
           }
-          .remark{
+          .remark {
             font-size: 16px;
             color: #626571;
             line-height: 24px;
@@ -614,7 +637,7 @@ export default {
       }
       .blue {
         font-weight: 600;
-        color: #2F6DB3;
+        color: #2f6db3;
       }
       .green {
         font-weight: 600;
@@ -622,7 +645,7 @@ export default {
       }
       .red {
         font-weight: 600;
-        color: #D20B0B;
+        color: #d20b0b;
       }
       .rules {
         margin-top: 10px;

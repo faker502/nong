@@ -153,7 +153,7 @@
 			<ul class="left">
 				<li>
 					<div class="item">
-						<p>
+						<p @click="$router.push('/my/balance')">
 							<span>总资产 (元)</span>
 							<van-icon name="arrow" />
 						</p>
@@ -177,7 +177,7 @@
 				</li>
 			</ul>
 			<div class="right item">
-				<p>
+				<p @click="$router.push('/my/fund-list')">
 					<span>数字人民币</span>
 					<van-icon name="arrow" />
 				</p>
