@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <nav-bar
-      title=""
-      titleColor="#313231"
-      leftIconColor="#313231"
+      title="幸运转盘"
+      titleColor="#fff"
+      leftIconColor="#fff"
       class="nav-top"
     />
 
@@ -13,7 +13,7 @@
 
     <div class="part1">
       <div class="top-head">
-        <!-- <div class="top-1">
+        <div class="top-1">
           <div class="top-2">
             <img
               :src="portraitUrl"
@@ -32,7 +32,7 @@
               抽奖记录
             </div>
           </div>
-        </div> -->
+        </div>
         <div class="top-1"></div>
       </div>
 
@@ -42,17 +42,17 @@
           <div class="">
             <van-notice-bar
               scrollable
-              background="transparent"
-              color="#fff"
+              background="#dee2c8"
+              color="#555"
               :text="notice"
             >
-              <!-- <template #left-icon>
+              <template #left-icon>
                 <img
                   :src="require('@/assets/photo/notice.webp')"
                   width="27px"
                   height="27px"
                 />
-              </template> -->
+              </template>
             </van-notice-bar>
           </div>
         </div>
@@ -60,20 +60,10 @@
 
         <div class="m-grid3">
           <div class="m-flex3">
-            <!-- <LuckyWheel
+            <LuckyWheel
               ref="myLucky"
               width="320px"
               height="320px"
-              :prizes="prizes"
-              :blocks="blocks"
-              :buttons="buttons"
-              @start="startCallback"
-              @end="endCallback"
-            /> -->
-            <LuckyGrid
-              ref="myLucky"
-              width="280px"
-              height="280px"
               :prizes="prizes"
               :blocks="blocks"
               :buttons="buttons"
@@ -129,132 +119,114 @@ export default {
 
       //prize config start
 
-      blocks: [{ padding: "5px", background: "transparent" }],
+      blocks: [{ padding: "5px", background: "#adb392" }],
       prizes: [
         {
-          x: 0,
-          y: 0,
           fonts: [
             { text: "未中奖", top: "10%", fontSize: "12px", fontColor: "#666" },
           ],
-        //   background: "#dee2c8",
+          background: "#dee2c8",
         },
         {
-          x: 1,
-          y: 0,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "1", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#eee",
+          background: "#eee",
         },
         {
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "30", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#dee2c8",
+          background: "#dee2c8",
         },
         {
-          x: 2,
-          y: 0,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "50", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#eee",
+          background: "#eee",
         },
         {
-          x: 0,
-          y: 1,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "100", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#dee2c8",
+          background: "#dee2c8",
         },
         {
-          x: 2,
-          y: 1,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "500", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#eee",
+          background: "#eee",
         },
         {
-          x: 0,
-          y: 2,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "1000", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#dee2c8",
+          background: "#dee2c8",
         },
         {
-          x: 1,
-          y: 2,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "1500", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#eee",
+          background: "#eee",
         },
         {
-          x: 2,
-          y: 2,
           fonts: [
             { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
             { text: "3000", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#dee2c8",
+          background: "#dee2c8",
         },
-        // {
-        //   fonts: [
-        //     { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-        //     { text: "5000", top: "40%", fontSize: "12px", fontColor: "#333" },
-        //   ],
-        //   background: "#eee",
-        // },
-        // {
-        //   fonts: [
-        //     { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-        //     { text: "7000", top: "40%", fontSize: "12px", fontColor: "#333" },
-        //   ],
-        //   background: "#dee2c8",
-        // },
-        // {
-        //   fonts: [
-        //     { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-        //     { text: "1万", top: "40%", fontSize: "12px", fontColor: "#333" },
-        //   ],
-        //   background: "#eee",
-        // },
-        // {
-        //   fonts: [
-        //     { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-        //     { text: "2万", top: "40%", fontSize: "12px", fontColor: "#333" },
-        //   ],
-        //   background: "#dee2c8",
-        // },
-        // {
-        //   fonts: [
-        //     { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-        //     { text: "5万", top: "40%", fontSize: "12px", fontColor: "#333" },
-        //   ],
-        //   background: "#eee",
-        // },
+        {
+          fonts: [
+            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "5000", top: "40%", fontSize: "12px", fontColor: "#333" },
+          ],
+          background: "#eee",
+        },
+        {
+          fonts: [
+            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "7000", top: "40%", fontSize: "12px", fontColor: "#333" },
+          ],
+          background: "#dee2c8",
+        },
+        {
+          fonts: [
+            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "1万", top: "40%", fontSize: "12px", fontColor: "#333" },
+          ],
+          background: "#eee",
+        },
+        {
+          fonts: [
+            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "2万", top: "40%", fontSize: "12px", fontColor: "#333" },
+          ],
+          background: "#dee2c8",
+        },
+        {
+          fonts: [
+            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "5万", top: "40%", fontSize: "12px", fontColor: "#333" },
+          ],
+          background: "#eee",
+        },
       ],
       buttons: [
         //{ radius: '40%', background: '#adb392' },
-        { radius: "35%", background: "transparent" },
+        { radius: "35%", background: "#eee" },
         {
-          x: 1,
-          y: 1,
           radius: "30%",
-          background: "transparent",
+          background: "#b9bf98",
           pointer: true,
-          fonts: [{ text: "抽奖", top: "40%" }],
+          fonts: [{ text: "抽奖", top: "-10px" }],
         },
       ],
 
@@ -416,23 +388,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-::v-deep .nav-top .van-icon:before {
-  background: #fff !important;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: -4px;
-}
 .page {
   position: relative;
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  background: url("@/assets/photo/roll-bg.png") no-repeat left top;
-  background-size: 100% 100%;
 
   .top {
     position: relative;
@@ -441,18 +401,15 @@ export default {
     height: 200px;
     left: 0;
     top: 0px;
-    // background-image: url("@/assets/photo/top-bg.webp");
+    background-image: url("@/assets/photo/top-bg.webp");
     //background-color: #a9ae8a;
     background-size: 100% 100%;
 
     .user-logo {
-      width: 200px;
-      height: 60px;
+      width: 100%;
+      height: 50px;
       text-align: center;
       padding-top: 30px;
-      background: url("@/assets/photo/roll-title.png") no-repeat center center;
-      background-size: 100%;
-      margin: 0 auto;
     }
   }
 
@@ -460,7 +417,7 @@ export default {
     position: relative;
     height: auto;
     left: 0;
-    // background: #ffffff;
+    background: #ffffff;
     text-align: center;
     margin: 0 auto;
     border-top-left-radius: 4px;
@@ -543,14 +500,12 @@ export default {
       margin: 0 0 3rem 0;
       color: #3f3d38;
       min-height: 400px;
-	  background: url('@/assets/photo/roll-content_bg.png') no-repeat left top;
-	  background-size: 100%;
+
       .marquee {
         margin: 0;
         overflow: hidden;
         font-size: 12px;
         width: 100%;
-		padding-top: 3px;
       }
 
       .m-grid {
@@ -588,11 +543,6 @@ export default {
           font-size: 16px;
           font-weight: 600;
           padding: 0;
-		  border: 1px solid red;
-		  display: flex;
-		  align-items: center;
-		  justify-content: center;
-		  padding-top: 27px;
         }
       }
 
