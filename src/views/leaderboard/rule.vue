@@ -1,12 +1,12 @@
 <template>
   <div class="page">
 	  <div class="part_1">
-	    <nav-bar title="排行奖励规则"  />
+	    <nav-bar title="" class="nav-top" />
 	  </div>
 	  
     <div class="part_2">
         <div class="count-list">
-         <img :src="require('@/assets/img/rank-rule.webp')" width="100%" />
+         <img :src="require('@/assets/img/rank-rule.png')" width="100%" />
         </div>
     </div>
     
@@ -30,6 +30,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .nav-top .van-icon:before {
+      background: #fff !important;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -4px;  
+    }
 
 
 .page {
@@ -46,7 +56,7 @@ export default {
     z-index: 999;
   }
   .part_2 {
-    margin-top:66px;
+    margin-top:-44px;
     .data_box {
       .count-list{
         margin-top:280px;

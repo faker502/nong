@@ -115,7 +115,7 @@
             <!-- <p><span>中国强农</span><van-icon name="arrow" /></p>
             <h2>抽奖中心</h2> -->
           </div>
-          <div class="study-item" @click="$router.push('/rank')">
+          <div class="study-item" @click="$router.push('/rank-rule')">
             <img
               src="@/assets/photo/study-right.png"
               style="width: 100%; border-radius: 4px; height: 160px"
