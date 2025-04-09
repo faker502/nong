@@ -86,12 +86,14 @@
         <div class="m-grid">
           <!-- 	 	<div @click="showTip" class="m-flex" style="font-size:14px;color:#999;justify-content:flex-end;">抽奖规则&nbsp;<img  src="@/assets/img/icon/tips.webp" style="width:14px;height:14px;line-height:20px;"></div>
 	 	<div class="m-flex"></div> -->
+			<h1></h1>
         </div>
 
-        <div class="m-grid">
-          <div v-html="showTips" style="padding: 20px 0 90px 0"></div>
-        </div>
+        
       </div>
+	  <div class="m-grid">
+          <div v-html="showTips"  class="tips"></div>
+        </div>
     </div>
   </div>
 </template>
@@ -540,11 +542,13 @@ export default {
       position: relative;
       top: calc(33%);
       display: block;
-      margin: 0 0 3rem 0;
+      margin: 0 auto;
       color: #3f3d38;
       min-height: 400px;
 	  background: url('@/assets/photo/roll-content_bg.png') no-repeat left top;
 	  background-size: 100%;
+	  width: 305px;
+	  height: 398px;
       .marquee {
         margin: 0;
         overflow: hidden;
@@ -560,7 +564,19 @@ export default {
         grid-gap: 10px;
         width: 80%;
         margin: 0 auto 0 auto;
-
+		h1 {
+			width: 160px;
+			height: 21px;
+			background: url('@/assets/photo/roll-text.png') no-repeat center center;
+			background-size: 100%;
+			margin: 0 auto;
+			margin-top: 30px;
+		}
+		.tips {
+			color: #fff;
+			font-size: 14px;
+			margin-top: 34px;
+		}	
         .m-flex {
           display: flex;
           //border: 1px solid #f00;
@@ -588,7 +604,7 @@ export default {
           font-size: 16px;
           font-weight: 600;
           padding: 0;
-		  border: 1px solid red;
+		//   border: 1px solid red;
 		  display: flex;
 		  align-items: center;
 		  justify-content: center;
