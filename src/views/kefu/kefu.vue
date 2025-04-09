@@ -1,19 +1,33 @@
 <template>
   <div class="page">
     <div class="top-bg">
-        <nav-bar title="学习中心" />
-		<img src="@/assets/img/kefu.webp" style="width: 100%;">
+        <nav-bar title="客服中心" titleColor="#313231"
+        leftIconColor="#313231"
+        class="nav-top"/>
+		<!-- <img src="@/assets/img/kefu.webp" style="width: 100%;"> -->
     </div>
     <div class="head">
-        <div class="narvbar">
-            <div @click="$router.push('/online')">
-                <div>联系我们</div>
-                <div>在线客服 <!--08:00 ~ 22:00-->
-                <span style="font-size:14px;">
-                 <i data-v-067c0a25="" class="van-icon van-icon-arrow van-cell__right-icon"></i>
-                </span></div>
+        <img src="@/assets/photo/kf_left.png" style="width: 100%;">
+        <div class="kf_right">
+            <div class="kf_right_top">
+                <p>欢迎访问客服中心！</p>
+                <h6>了解更多助农项目详情</h6>
+                <p class="last">点击下方联系客服！客服在线时间：</p>
+                <h5>08:00-22:00</h5>
+            </div>
+            <div class="kf_right_bottom" @click="$router.push('/online')">
+            联系客服
             </div>
         </div>
+        <!-- <div class="narvbar">
+            <div @click="$router.push('/online')">
+                <div>联系我们</div>
+                <div>在线客服 
+                <span style="font-size:14px;">
+                 <i data-v-067c0a25="" class="van-icon van-cell__right-icon"></i>
+                </span></div>
+            </div>
+        </div> -->
     </div>
 
 
@@ -21,14 +35,20 @@
     <div class="questions">
         <div class="title">
             <div class="title-2">常见问题</div>
-            <div class="more" @click="$router.push({ path: '/news?type=7' });">
+            <!-- <div class="more" @click="$router.push({ path: '/news?type=7' });">
                 <i class="van-icon van-cell__right-icon">更多 &gt; </i>
-            </div>
+            </div> -->
         </div>
-        <van-cell-group inset>
-            <van-cell v-for="(item, key) in qestionList" :key="key"
-          :title="key+1 +'、'+ item.noticeTitle" size="large" title-class="cell-title" value="" @click="tolink(item)" is-link />
-        </van-cell-group>
+        <van-collapse v-model="activeNames" accordion>
+            <van-collapse-item v-for="(item, key) in qestionList" 
+                :key="key"
+                :title="item.noticeTitle"
+                :name="key">
+                <div class="question-content">
+                    {{ item.noticeContent }}
+                </div>
+            </van-collapse-item>
+        </van-collapse>
     </div>
 
 
@@ -36,11 +56,17 @@
 </template>
 <script>
 import { getQuestionsApi } from "@/api/article";
+import { Collapse, CollapseItem } from 'vant';
 //import { openChat } from "@/utils/chat";
 export default {
+    components: {
+        [Collapse.name]: Collapse,
+        [CollapseItem.name]: CollapseItem
+    },
     data() {
         return {
             qestionList: [],
+            activeNames: []
         };
     },
     computed: {},
@@ -59,7 +85,9 @@ export default {
     methods: {
         getQuestions() {
             getQuestionsApi().then((res) => {
-                this.qestionList = res.data
+                if (res.code === 200) {
+                    this.qestionList = res.data || [];
+                }
             });
         },
         tolink(item) { 
@@ -70,6 +98,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .nav-top .van-icon:before {
+  background: #fff !important;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .page {
  
@@ -80,59 +117,78 @@ export default {
     background: #F4F4F4;
 }
 .top-bg{
-    position: relative;
+    // position: relative;
     width: 100%;
 	display: block;
-	margin-top: 66px;
+	// margin-top: 66px;
+    background: linear-gradient(180deg, #F2F6D4 0%, rgba(255, 254, 252, 0) 100%);
+    height: 165px;
+
 
 }
 .head{
-    position: relative;
-    
-    .narvbar{
-        /*display: grid;*/
-        //grid-template-columns: repeat(2, 1fr);
-        
-        width: 94%;
-        margin: 10px auto 0 auto;
-        text-align: left;
-        padding: 10px 10px;
-        line-height: 24px;
-        /*border: 2px solid #999;*/
-        border-radius: 8px;
-       
-
-        div{
-
-            /*border:1px solid blue;*/
-            div:nth-child(1){
-             margin:0 auto;
-                color:#D11A2D;
-                font-size: 18px;
-                font-weight: 600;
-            }
-            div:nth-child(2){
-                //margin-left:6%;
-                background-color:#fff;
-                margin-top:15px;
-                padding-left:20px;
-                padding-right:0;
-                padding-top:10px;
-                padding-bottom:10px;
-                color: #333;
-                font-size: 16px;
-                text-align:left;
-                span {
-                   position:absolute;
-
-                   display:inline-block;
-                   color:green;
-                   text-align:right;
-                   right:10%;
-                }
+   
+    // border: 1px solid red;
+    height: 139px;
+    margin: 0px 16px;
+     margin-top: -109px;
+     display: flex;
+     justify-content: space-between;
+     img {
+        width: 128px!important;
+        height: 100%;
+        margin-right: 12px;
+     }
+     .kf_right{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px;
+        padding-bottom: 0px;
+        padding-right: 0px;
+        box-sizing: border-box;
+        color: #313231;
+        p {
+            font-size: 14px;
+            &.last {
+                color: #6C6E6C;
+                font-size: 10px;
             }
         }
-    }   
+        h6 {
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(117.82deg, #7A963C 10.14%, #34420D 110.18%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+        h5 {
+            font-size: 16px;
+            color: #313231;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .kf_right_bottom {
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            height: 30px;
+            background: linear-gradient(180deg, #7E963C 0%, #455117 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            color: #fff;
+        }
+     }
 }
 
 
@@ -142,6 +198,8 @@ export default {
     width: 100%;
 	margin:0 auto;
     margin-bottom: 110px;
+    padding: 0 16px;
+    box-sizing: border-box;
 
     .title{
         width: 100%;
@@ -154,7 +212,7 @@ export default {
             width: 170px;
             font-size: 18px;
             font-weight: 600;
-            color: #D11A2D;
+            color: #313231;
         }
         .more{
      
@@ -207,6 +265,39 @@ export default {
         padding: 16px 0;
         font-size:16px;
         color: #ffffff;
+    }
+}
+
+::v-deep .van-collapse-item {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    
+    .van-collapse-item__title {
+       background: #fff;
+
+;
+        padding: 15px;
+        font-size: 16px;
+        color: #313231;
+        
+        &::after {
+            border-color: #fff;
+        }
+    }
+    
+    .van-collapse-item__content {
+        background: #fff;
+        padding: 15px;
+        color: #6C6E6C;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}
+
+::v-deep .van-collapse-item__wrapper {
+    .van-collapse-item__content {
+        background: #fff;
     }
 }
 </style>
