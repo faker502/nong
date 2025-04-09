@@ -74,7 +74,7 @@
           <!-- <div class="home-item" @click="$router.push('/withdraw')">
             <img src="@/assets/photo/index3.webp" style="width: 100%" />
           </div> -->
-          <div class="home-item" @click="$router.push('sign')">
+          <div class="home-item" @click="$router.push('download')">
             <span>下载</span>
             <img src="@/assets/photo/index21.png" style="width: 100%" />
           </div>
@@ -85,7 +85,7 @@
           <div
             class="home-item"
             style="z-index: 1550"
-            @click="$router.push('/online')"
+            @click="$router.push('/kefu')"
           >
             <span>客服</span>
             <img src="@/assets/photo/index41.png" style="width: 100%" />

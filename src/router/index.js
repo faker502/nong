@@ -674,6 +674,12 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/download",
+    name: "download",
+    component: () => import("@/views/download/index.vue"),
+    meta: { title: "下载" },
+  }
 ];
 
 const router = new VueRouter({
