@@ -61,7 +61,7 @@
 
             <div class="dddd">
 				<ul>
-					<li>
+					<li @click="$router.push('/meeting')">
 						<img src="@/assets/photo/meeting.png" />
 						<span>会议中心</span>
 					</li>

@@ -94,6 +94,15 @@ const routes = [
     }
   },
   {
+    path: '/meeting',
+    name: 'Meeting',
+    component: () => import('@/views/news/meeting.vue'),
+    meta: {
+      title: "相关文件",
+      tabbar: false
+    }
+  },
+  {
     path: '/file-list',
     name: 'FileList',
     component: () => import('@/views/news/file-list.vue'),
