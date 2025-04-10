@@ -72,8 +72,8 @@
             /> -->
             <LuckyGrid
               ref="myLucky"
-              width="280px"
-              height="280px"
+              width="234px"
+              height="234px"
               :prizes="prizes"
               :blocks="blocks"
               :buttons="buttons"
@@ -137,78 +137,90 @@ export default {
           x: 0,
           y: 0,
           fonts: [
-            { text: "未中奖", top: "10%", fontSize: "12px", fontColor: "#666" },
+            { text: "现金 2元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+			// { text: "2元", top: "10%", fontSize: "12px", fontColor: "#666" },
           ],
+		  imgs: [{src: require('@/assets/photo/lot-small.png'), width: '21px', height: '28px', top: '10%'}]
         //   background: "#dee2c8",
         },
         {
           x: 1,
           y: 0,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "1", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "现金 500元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "1", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
         //   background: "#eee",
+		imgs: [{src: require('@/assets/photo/lot-large.png'), width: '25px', height: '28px', top: '10%'}]
         },
         {
-          fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "30", top: "40%", fontSize: "12px", fontColor: "#333" },
-          ],
-        //   background: "#dee2c8",
-        },
-        {
-          x: 2,
+
+		  x: 2,
           y: 0,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "50", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "现金 50元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "30", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#eee",
+		  imgs: [{src: require('@/assets/photo/lot-meduim.png'), width: '31px', height: '28px', top: '10%'}]
+        //   background: "#dee2c8",
         },
         {
           x: 0,
           y: 1,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "100", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "谢谢参与", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "50", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
-        //   background: "#dee2c8",
+		   imgs: [{src: require('@/assets/photo/lot-no.png'), width: '28px', height: '28px', top: '10%'}]
+        //   background: "#eee",
         },
+        // {
+        //   x: 0,
+        //   y: 1,
+        //   fonts: [
+        //    { text: "现金", top: "60%", fontSize: "12px", fontColor: "#768594" },
+        //     // { text: "100", top: "40%", fontSize: "12px", fontColor: "#333" },
+        //   ],
+        // //   background: "#dee2c8",
+        // },
         {
           x: 2,
           y: 1,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "500", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "现金 20元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "500", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
+		  imgs: [{src: require('@/assets/photo/lot-small.png'), width: '21px', height: '28px', top: '10%'}]
         //   background: "#eee",
         },
         {
           x: 0,
           y: 2,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "1000", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "现金 100元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "1000", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
+		  imgs: [{src: require('@/assets/photo/lot-meduim.png'), width: '31px', height: '28px', top: '10%'}]
         //   background: "#dee2c8",
         },
         {
           x: 1,
           y: 2,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "1500", top: "40%", fontSize: "12px", fontColor: "#333" },
+           { text: "现金 10元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "1500", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
+		  imgs: [{src: require('@/assets/photo/lot-small.png'), width: '21px', height: '28px', top: '10%'}]
         //   background: "#eee",
         },
         {
           x: 2,
           y: 2,
           fonts: [
-            { text: "现金", top: "10%", fontSize: "12px", fontColor: "#666" },
-            { text: "3000", top: "40%", fontSize: "12px", fontColor: "#333" },
+            { text: "现金1000元", top: "60%", fontSize: "12px", fontColor: "#768594" },
+            // { text: "3000", top: "40%", fontSize: "12px", fontColor: "#333" },
           ],
+		  imgs: [{src: require('@/assets/photo/lot-large.png'), width: '25px', height: '28px', top: '10%'}]
         //   background: "#dee2c8",
         },
         // {
@@ -256,8 +268,10 @@ export default {
           radius: "30%",
           background: "transparent",
           pointer: true,
-          fonts: [{ text: "抽奖", top: "40%" }],
+          fonts: [{ text: "", top: "40%" }],
+		  imgs: [{src: require('@/assets/photo/lot-do.png'), width: '80px', height: '76px', top: '-3.5%'}]
         },
+		
       ],
 
       key: 0,
@@ -293,7 +307,7 @@ export default {
       if (this.award != "") {
         this.$dialog({ message: this.award });
       }
-      this.buttons[1].fonts[0].text = "抽奖(" + this.remain + ")";
+    //   this.buttons[1].fonts[0].text = "抽奖(" + this.remain + ")";
     },
 
     //prize end
@@ -345,7 +359,7 @@ export default {
             this.remain = res.data.remain;
             this.notice = res.data.notice;
             console.log(this.buttons[1], "ppp");
-            this.buttons[1].fonts[0].text = "抽奖(" + this.remain + ")";
+            // this.buttons[1].fonts[0].text = "抽奖(" + this.remain + ")";
           }
         } else {
           if (res.code == 200) {
@@ -554,7 +568,7 @@ export default {
         overflow: hidden;
         font-size: 12px;
         width: 100%;
-		padding-top: 3px;
+		// padding-top: 3px;
       }
 
       .m-grid {
@@ -572,11 +586,7 @@ export default {
 			margin: 0 auto;
 			margin-top: 30px;
 		}
-		.tips {
-			color: #fff;
-			font-size: 14px;
-			margin-top: 34px;
-		}	
+		
         .m-flex {
           display: flex;
           //border: 1px solid #f00;
@@ -597,8 +607,10 @@ export default {
         grid-gap: 10px;
         margin: 20px auto 10px auto;
         //border:1px solid #f00;
-        height: 320px;
-        width: 320px;
+        height: 234px;
+        width: 234px;
+		// border: 1px solid blue;
+		margin-top: 46px;
         .m-flex3 {
           display: flex;
           font-size: 16px;
@@ -608,7 +620,8 @@ export default {
 		  display: flex;
 		  align-items: center;
 		  justify-content: center;
-		  padding-top: 27px;
+		  box-sizing: border-box;
+		//   padding-top: 27px;
         }
       }
 
@@ -760,4 +773,10 @@ export default {
     color: $font_color_white !important;
   }
 }
+.tips {
+			color: #fff!important;
+			font-size: 14px;
+			margin: 24px 0;
+			padding-left: 16px;
+		}	
 </style>
