@@ -33,8 +33,8 @@
       </van-tabbar-item>
       
 
-      <van-tabbar-item name="fund" to="/fund-in">
-        <span style="font-size: 14px">预审</span>
+      <van-tabbar-item name="fund" to="/ms">
+        <span style="font-size: 14px">强农</span>
         <template #icon="props">
           <img
             :src="props.active ? icon[3].active : icon[3].inactive"
