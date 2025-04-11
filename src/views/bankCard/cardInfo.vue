@@ -119,7 +119,7 @@ export default {
       }
     },
     getBankBranch(item) {
-      return item.bankBranch || '重庆渝北分行'; // 如果没有分行信息则显示默认值
+      return item.bankBranch || ''; // 如果没有分行信息则显示默认值
     }
   }
 };
@@ -243,10 +243,10 @@ export default {
           }
 
           .card-number {
-            font-size: 24px;
+            font-size: 18px;
             color: #FFFFFF;
             font-family: monospace;
-            font-weight: 500;
+            font-weight: bold;
             letter-spacing: 2px;
           }
         }

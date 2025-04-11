@@ -110,7 +110,7 @@
                   </span>
                 </div>
 
-                <div class="itme df_r" v-if="activeIndex === 0">
+                <!-- <div class="itme df_r" v-if="activeIndex === 0">
                   <van-field
                     v-model="form.bankBranch"
                     placeholder="请输入银行开户分行"
@@ -120,7 +120,7 @@
                     :border="false"
                     :rules="[{ required: true }]"
                   />
-                </div>
+                </div> -->
               </div>
             </van-form>
           </div>
@@ -454,12 +454,12 @@ export default {
     setBankList() {
       if (this.bankList.length > 1) {
         for (var i = 0, len = this.bankList.length; i < len; i++) {
-          if (this.activeIndex == 0 && this.bankList[i].type == 1) {
+          if (this.activeIndex == 1 && this.bankList[i].type == 1) {
             this.form.bankNumber = this.bankList[i].number;
             this.form.bankUserName = this.bankList[i].name;
             this.alipayOk = true;
             break;
-          } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
+          } else if (this.activeIndex == 0 && this.bankList[i].type == 2) {
             this.form.bankName = this.bankList[i].bankName;
             this.form.bankNumber = this.bankList[i].number;
             this.bankOk = true;
@@ -490,14 +490,14 @@ export default {
           console.log(this.activeIndex);
           console.log(this.bankList[i].bankName);
 
-          if (this.activeIndex == 0 && this.bankList[i].type == 1) {
+          if (this.activeIndex == 1 && this.bankList[i].type == 1) {
             this.form.bankNumber = this.bankList[i].number;
             this.form.bankUserName = this.bankList[i].name;
             this.form.bankName = "";
             this.alipayOk = true;
             this.isSubmit = false;
             break;
-          } else if (this.activeIndex == 1 && this.bankList[i].type == 2) {
+          } else if (this.activeIndex == 0 && this.bankList[i].type == 2) {
             this.form.bankName = this.bankList[i].bankName;
             this.form.bankNumber = this.bankList[i].number;
             this.bankOk = true;
@@ -525,10 +525,11 @@ export default {
       }
     },
     getBankName() {
-      var res = bankCardAttribution({ cardNo: this.form.bankNumber });
-      if (res) {
-        this.form.bankName = res == "error" ? "" : res.bankName;
-      }
+      return ''
+      // var res = bankCardAttribution({ cardNo: this.form.bankNumber });
+      // if (res) {
+      //   this.form.bankName = res == "error" ? "" : res.bankName;
+      // }
     },
     bindBank() {
       if (this.form.type != 1) {
@@ -568,10 +569,10 @@ export default {
         var msg = "银行账号";
       } else {
       }
-      bindBankApi(this.form).then((res) => {
+      bindBankApi({...this.form, type: this.form.type == 1 ? 2 : 1}).then((res) => {
         if (res.code == 200) {
           this.$dialog({
-            message: msg + "绑定成功",
+            message: "绑定成功",
             className: "dialog-error",
           });
           this.$router.push("/withdraw");

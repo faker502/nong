@@ -213,7 +213,7 @@ body {
         padding: 10px 60px;
         color: #fff;
         font-weight: 600;
-        background-color: #4B594A;
+        background-color: #4B594A!important;
         width: 50%;
         border-radius: 24px;
       }

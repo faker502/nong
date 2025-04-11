@@ -122,7 +122,7 @@
                 </div>
                 <div class="remark">备注：这里是备注信息，这里是备注信息这里是备注信息这里是备注信息</div>
               </div> -->
-              <div class="btns">
+              <div class="btns" v-if="billList.length > 0">
                 <p>转账</p>
                 <p @click="$router.push({ path: '/withdraw' })">提现</p>
               </div>

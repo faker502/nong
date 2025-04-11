@@ -413,6 +413,7 @@
     </van-popup>
 
     <van-dialog
+      class="dialog-logout"
       use-slot
       v-model="showLogout"
       cancel-button-text="取消"
@@ -882,7 +883,7 @@ export default {
 .test-page {
 	padding-bottom: 50px;
   ::v-deep .van-dialog__cancel{
-    background: #fff!important;
+    // background: #fff!important;
   }
   .active-pop {
     height: 100%;
@@ -1634,20 +1635,20 @@ export default {
           .van-button__content {
             border: none !important;
             justify-content: left;
-            .van-button__text {
-              .im {
-                position: absolute;
-                right: 10px;
-                top: 15px;
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                img {
-                  width: 15px;
-                  height: 15px;
-                }
-              }
-            }
+            // .van-button__text {
+            //   .im {
+            //     position: absolute;
+            //     right: 10px;
+            //     top: 15px;
+            //     display: inline-block;
+            //     width: 16px;
+            //     height: 16px;
+            //     img {
+            //       width: 15px;
+            //       height: 15px;
+            //     }
+            //   }
+            // }
             sup {
               box-sizing: border-box;
               text-align: center;
@@ -1896,19 +1897,21 @@ export default {
       border-radius: 8px;
       &.van-dialog__cancel {
         // background: #fff!important;
-        .van-button__text {
-          background: #fff!important;
-        }
+        // .van-button__text {
+        //   background: #fff!important;
+        // }
       }
     //   border-bottom: 1px solid #f0f3dc !important;
       .van-button__text {
         color: #4B594A;
         font-weight: normal;
         font-size: 17px;
-		font-weight: 600;
+		    font-weight: 600;
       }
     }
   }
+
+  
 
   .van-dialog {
     border-radius: 8px;
@@ -1920,7 +1923,7 @@ export default {
   }
 
   .van-dialog__cancel {
-    display: inline-block !important;
+    // display: inline-block !important;
   }
   ::v-deep .van-dialog .van-button--default {
     background: #F6FEF2;
@@ -1929,34 +1932,55 @@ export default {
     border-radius: 33px;
     // margin: 16px;
     box-sizing: border-box;
-    .van-button__text {
-      padding: 0;
-      border: 1px solid #4B594A;
-      width: 90%;
-      height: 36px;
-      line-height: 36px;
-      border-radius: 18px;
-      color: #4B594A;
-    }
+    // .van-button__text {
+    //   padding: 0;
+    //   border: 1px solid #4B594A;
+    //   width: 90%;
+    //   height: 36px;
+    //   line-height: 36px;
+    //   border-radius: 18px;
+    //   color: #4B594A;
+    // }
     &.van-dialog__confirm {
-        .van-button__text {
-          color:#fff;
-          background: #4B594A;
-        }
+        // .van-button__text {
+        //   color:#fff;
+        //   background: #4B594A;
+        // }
     }
   }
   ::v-deep .van-dialog__cancel {
     display: inline-block !important;
     // background: #fff!important;
-    .van-button__text {
-      background: transparent!important;
-    }
+    // .van-button__text {
+    //   background: transparent!important;
+    // }
   }
 
   ::v-deep .van-hairline--top {
     // border-top: rgba(172, 32, 35, 0.06) 1px solid;
   }
 }
+::v-deep .dialog-logout {
+    .van-dialog__footer {
+      // padding: 0 16px;
+      .van-button--default {
+        display: flex!important;
+        &.van-dialog__cancel {
+          background: #fff!important;
+          margin-left: 5px;
+          .van-button__text {
+            background: #fff!important;
+            border: 1px solid #4B594A;
+            color: #4B594A;
+          }
+        }
+      }
+      .van-button__text {
+        // padding: 0
+      }
+    }
+  }
+
 </style>
 <style>
 .i-mask {

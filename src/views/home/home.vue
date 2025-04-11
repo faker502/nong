@@ -1189,7 +1189,7 @@ export default {
   border-radius: 4px;
 }
 .van-dialog .van-button .van-button__content .van-button__text {
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
 }
 .van-dialog .van-dialog__cancel .van-button__content .van-button__text {
   color: #626571;

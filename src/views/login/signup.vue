@@ -315,6 +315,7 @@ export default {
     }
   },
   mounted() {
+    // Dialog({ message: '注册成功，去登录！', className: 'dialog-error' })
     if (this.$route.query.code) {
       this.rform.code = this.$route.query.code;
     }
