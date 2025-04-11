@@ -54,9 +54,9 @@
       </van-tabbar-item>
      
       <van-tabbar-item name="my" to="/my">
-        <span v-show="msgCount" class="red-p"
+        <!-- <span v-show="msgCount" class="red-p"
           ><el-badge :value="msgCount" :max="99"></el-badge
-        ></span>
+        ></span> -->
 
         <span style="font-size: 14px">我的</span>
         <template #icon="props">
@@ -134,6 +134,7 @@ export default {
     },
     getConfig() {
       getConfigKey({ mimi: 1, key: "endPreheatcle" }).then((res) => {
+        console.log(res);
         this.online = res.data.online;
         this.isYuShen = res.data.isYuShen;
         this.msgCount = res.data.msgCount;
@@ -186,8 +187,9 @@ body {
   }
 }
 .van-dialog {
-  border-radius: 6px !important;
+  border-radius: 16px !important;
   top: 50%;
+  background-color: #F6FEF2 !important;
   .van-dialog__header {
     padding: 20px 40px;
     font-weight: 600;
@@ -203,14 +205,17 @@ body {
     font-weight: 600;
     .van-button__content {
       background-color: transparent !important;
-      border-top: rgba(172, 32, 35, 0.06) 1px solid;
+      // border-top: rgba(172, 32, 35, 0.06) 1px solid;
       .van-button__text {
         //background: radial-gradient(82.74% 862.49% at 28.76% 51.43%, rgba(114, 175, 248, 0.55) 0%, rgba(114, 175, 248, 0.12) 100%);
         //background-color: #fbfbfb;
         border-radius: 4px;
         padding: 10px 60px;
-        color: #ee0a24;
+        color: #fff;
         font-weight: 600;
+        background-color: #4B594A;
+        width: 50%;
+        border-radius: 24px;
       }
     }
   }

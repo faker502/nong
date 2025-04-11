@@ -39,7 +39,7 @@
           </ul> -->
 
           <!-- 星期 -->
-          <ul class="weekdays">
+          <!-- <ul class="weekdays">
             <li :class="dateWeek == 0 ? 'week' : ''">日</li>
             <li :class="dateWeek == 1 ? 'week' : ''">一</li>
             <li :class="dateWeek == 2 ? 'week' : ''">二</li>
@@ -47,10 +47,10 @@
             <li :class="dateWeek == 4 ? 'week' : ''">四</li>
             <li :class="dateWeek == 5 ? 'week' : ''">五</li>
             <li :class="dateWeek == 6 ? 'week' : ''">六</li>
-          </ul>
+          </ul> -->
           <!-- 日期 -->
           <ul class="days bottom-line">
-            <li v-for="day in days">
+            <li v-for="(day, index) in days" :key="index" :class="{'signed': day.isSign}">
               <!--本月已签到日期-->
               <span
                 v-if="day.isSign && day.day.getMonth() + 1 === currentMonth"
@@ -62,12 +62,10 @@
                 "
               >
                 <img
-                  src="@/assets/photo/check.png"
+                  src="@/assets/photo/ball.png"
                   style="
-                    width: 25px;
-                    height: 24px;
-                    position: absolute;
-                    top: 10px;
+                    width: 17px;
+                    height: 17px;
                   "
                 />
                 <span class="text">{{ day.day.getDate() }}</span>
@@ -83,12 +81,11 @@
                 class="cli sign-today"
               >
                 <img
-                  src="@/assets/photo/mn.png"
+                  src="@/assets/photo/ball.png"
                   style="
-                    width: 25px;
-                    height: 24px;
-                    position: absolute;
-                    top: 10px;
+                    width: 17px;
+                    height: 17px;
+                    
                   "
                 />
                 <span class="text">{{ day.day.getDate() }}</span>
@@ -100,12 +97,11 @@
                 "
               >
                 <img
-                  src="@/assets/photo/mn.png"
+                  src="@/assets/photo/ball.png"
                   style="
-                    width: 25px;
-                    height: 24px;
-                    position: absolute;
-                    top: 10px;
+                    width: 17px;
+                    height: 17px;
+                   
                   "
                 />
                 <span class="text">{{ day.day.getDate() }}</span>
@@ -537,15 +533,15 @@ export default {
 
         display: inline;
         font-style: normal;
-        font-weight: 800;
-        font-size: 15px;
+        font-weight: bold;
+        font-size: 18px;
         line-height: 35px;
         /* identical to box height, or 133% */
         text-align: center;
 
-        color: #333;
+        color: #313231;
 
-        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+        // text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 
         /* Inside auto layout */
         flex: none;
@@ -558,15 +554,15 @@ export default {
           height: 35px;
 
           font-style: normal;
-          font-weight: 800;
-          font-size: 30px;
+          font-weight: bold;
+          font-size: 34px;
           line-height: 35px;
           /* or 70% */
           text-align: center;
 
-          color: #ec612f;
+          color: #CE9F03;
 
-          text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+          // text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 
           /* Inside auto layout */
           flex: none;
@@ -645,6 +641,7 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
+    gap: 1px;
     .sign-day {
       //background: rgba(114, 175, 248, 0.12);
       //background-image: url(@/assets/img/sign-checked.png);
@@ -662,36 +659,46 @@ export default {
     }
     li {
       list-style-type: none;
-      width: 14.2%;
+      width: 13.5%;
       padding: 0;
       box-sizing: border-box;
-      height: 66px;
+      // height: 66px;
+      height: 44px;
       margin-bottom: 4px;
       text-align: center;
       color: #555;
       font-size: 17px;
 
-      background: #f8f8f8;
+      background: #9B9B9B;
+      
       border-radius: 7px;
-      margin: 3px;
+      // margin: 1px;
+      &.signed {
+        background:  #DE4A4A;
+      }
 
       .cli {
         position: relative;
         width: 100%;
-        height: 66px;
+        // height: 66px;
+        height: 100%;
         display: flex;
         align-items: center;
+        flex-direction: column;
         justify-content: center;
 
         .text {
-          position: absolute;
-          bottom: 10px;
+          // position: absolute;
+          // bottom: 10px;
+          font-size: 10px;
+          color: #fff;
+          margin-top: 5px;
         }
 
         img {
           /*签到的日期*/
           height: 40px;
-          position: absolute;
+          // position: absolute;
         }
       }
     }
@@ -734,19 +741,21 @@ export default {
     z-index: 100;
     padding: 12px 0 0 0;
     .bottom-3 {
-      width: 90%;
+      width: 60%;
       margin: 0 auto;
       text-align: center;
       font-size: 16px;
       //background: linear-gradient(180deg, #dbe1ba 0%, #a8ad89 100%);
-      background: linear-gradient(90deg, #ed5b4f 0%, #f9b170 100%);
+      // background: linear-gradient(90deg, #ed5b4f 0%, #f9b170 100%);
+      background: linear-gradient(180deg, #7E963C 0%, #455117 100%);
+
       border-radius: 7px;
       padding: 16px 0;
       color: #ffffff;
       font-weight: 600;
     }
     .bottom-4 {
-      width: 90%;
+      width: 60%;
       margin: 0 auto;
       text-align: center;
       font-size: 16px;

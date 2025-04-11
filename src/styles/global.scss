@@ -401,8 +401,9 @@ body:before {
     border: 1px solid $base_border_color;
   }
   .van-dialog__confirm {
-    background: $base_btn_color2;
+    background: #4B594A;
     color: $font_color_white;
+    color: #fff;
     // border: 1px solid $base_border_color;
   }
 }

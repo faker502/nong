@@ -227,7 +227,7 @@ export function getCodeApi1(data = {}) {
 }
 export function getPrizeApi(data = {}) {
   return request({
-    url: '/home/member/prize',
+    url: '/home/project/getAward', // '/home/member/prize',
     method: 'post',
     data: data
   })

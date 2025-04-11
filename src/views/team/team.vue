@@ -4,10 +4,9 @@
       <div class="user-logo">
         <img src="@/assets/photo/user-logo.png" />
       </div>
-
       <section class="info_section">
         <div class="top">
-          <img src="@/assets/photo/user-logo.png" alt="">
+          <img :src="member.portraitUrl" alt="">
           <div class="right">
             <strong>{{member.topName}}</strong>
             <span>{{ member.topPhone }}</span>
@@ -16,15 +15,15 @@
         <ul>
           <li>
             <span>团队收益</span>
-            <strong>1088.53</strong>
+            <strong>{{teamCount.allAward}}</strong>
           </li>
           <li>
             <span>团队人数</span>
-            <strong>50</strong>
+            <strong>{{teamCount.allPeople}}</strong>
           </li>
           <li>
             <span>已激活人数</span>
-            <strong>39</strong>
+            <strong>{{teamCount.activeTeamTotal}}</strong>
           </li>
         </ul>
       </section>
@@ -180,6 +179,7 @@ export default {
   name: "Team",
   data() {
     return {
+      info: {},
 		isYuShen:0,
       'title': '我的团队',
       list: [],
@@ -251,6 +251,7 @@ export default {
 	},
 	getConfig() {
 	  getConfigKey({ 'key': 'endPreheatcle' }).then((res) => {
+    this.info = res.data
 		if (res.data.uStatus && res.data.uStatus == 2) {
 			this.showMask = true;
 		}
@@ -277,6 +278,7 @@ export default {
 
         //总笔数
         this.total = res.data.memberList.total;
+        
 
         //第几页
         //this.pageNum = res.data.memberList.current_page;

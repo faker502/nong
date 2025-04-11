@@ -128,13 +128,13 @@
             style="width: 100%; border-radius: 4px; height: 160px"
           /> -->
         </div>
-
+      <!--@click="$router.push({ path: '/daily', query: { type: 2 } })" -->
         <div class="acticle">
           <div class="header">
             新闻中心
             <div
               style="float: right; font-weight: normal; color: #6e8285"
-              @click="$router.push({ path: '/daily', query: { type: 2 } })"
+              
             >
               <van-icon name="arrow" />
             </div>
@@ -152,7 +152,7 @@
             "
           >
             <div class="left">
-              <img src="@/assets/photo/demo-news.png" />
+              <img :src="item.img" style="width: 96px; height: 118px;" />
             </div>
             <div class="right">
               
@@ -310,11 +310,11 @@ export default {
         //debugger;
         this.notice = res.data;
         this.register = res.register;
-        if (res.data["read"] == "read") {
-          this.show = false;
-        } else {
-          this.show = true;
-        }
+        // if (res.data["read"] == "read") {
+        //   this.show = false;
+        // } else {
+        //   this.show = true;
+        // }
         this.poster = res.data.poster;
         this.uri = res.data.uri;
 

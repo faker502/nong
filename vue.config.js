@@ -54,7 +54,7 @@ module.exports = defineConfig({
       //   },
       // },
       "/app": {
-        target: "http://app-xi.uynhj.com", //  "",http://app-xi.uynhj.com
+        target: "http://farmer.uynhj.com", //  "",http://app-xi.uynhj.com
         changeOrigin: true,    //必须，允许跨域
         pathRewrite: {
           "^/app": "",

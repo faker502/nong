@@ -9,7 +9,7 @@
       />
       <div class="content-box">
         <p>总资产(元)</p>
-        <p>{{ account.balance }}</p>
+        <p>{{ account.balanceTotal }}</p>
       </div>
     </div>
     <div class="container">

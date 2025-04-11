@@ -347,7 +347,7 @@ export default {
             className: "dialog-error",
           })
             .then(() => {
-              this.$router.push("/card/bindAlipay");
+              this.$router.push("/card"); // /bindAlipay
             })
             .catch(() => {
               console.log("点击了取消");
@@ -360,7 +360,7 @@ export default {
             className: "dialog-error",
           })
             .then(() => {
-              this.$router.push("/card/bindBankcard");
+              this.$router.push("/card"); // /bindBankcard
             })
             .catch(() => {
               console.log("点击了取消");

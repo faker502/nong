@@ -72,7 +72,7 @@ export default {
   methods: {
     getList() {
       let that = this
-      getNewsListApi({ type: 8, pageNum: that.pageNum }).then((res) => {
+      getNewsListApi({ type: 3, pageNum: that.pageNum }).then((res) => {
         if (res.code != 200) {
           this.$dialog({ message: '请求失败', className: 'dialog-error' })
           return false;

@@ -21,8 +21,8 @@
               <div class="info-top">
                 <img src="@/assets/photo/demo-news.png" />
                 <div class="info-top-right">
-                  <h6>王成文</h6>
-                  <p>人民资产宣传部第一科室科长</p>
+                  <h6>{{it.remark}}</h6>
+                  <p>{{it.updateBy}}</p>
                 </div>
               </div>
               <p>{{it.createTime}}</p>

@@ -16,15 +16,28 @@
     </div>
     <div class="down_btn">
         <img src="@/assets/photo/down_andriod.png" alt="" @click="downLoad('android')">
-        <img src="@/assets/photo/down_ios.png" alt="" @click="downLoad('ios')">
+        <!-- <img src="@/assets/photo/down_ios.png" alt="" @click="downLoad('ios')"> -->
     </div>
   </div>
 </template>
 <script>
+import { getConfigKey } from "@/api/index";
 export default {
+    data() {
+        return {
+            link: ''
+        }
+    },
+    mounted() {
+        getConfigKey({ mimi: 1, key: "endPreheatcle" }).then((res) => {
+            // this.isIos = res.data.isIos;
+            this.link = res.data.xiDown;
+      });
+    },
     methods: {
         downLoad(type) {
             console.log(type);
+            window.location.href = this.link;
         }
     }
 }

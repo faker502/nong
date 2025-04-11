@@ -77,7 +77,20 @@
                  <p>与您的朋友分享此邀请码</p>
 				 <div>
 					 <span>{{ shareCode }}</span>
-					 <strong @click="handleCopyCode"><van-icon name="records-o" color="#fff" size="18" /></strong>
+					 <strong @click="handleCopyCode('code')"><img src="@/assets/photo/copy.png" alt=""></strong>
+				</div> 
+                
+              </div>
+            </div>
+          </div>
+
+		     <div class="copy_box" style="margin-top: 10px;">
+            <div class="copy_item df_r">
+              <div class="left">
+                 <p>与您的朋友分享此邀请链接</p>
+				 <div>
+					 <span style="font-size: 13px; line-height: 18px;">{{ shareLink }}</span>
+					 <strong @click="handleCopyCode('link')"><img src="@/assets/photo/copy.png" alt=""></strong>
 				</div> 
                 
               </div>
@@ -103,19 +116,19 @@
 
 	<!-- 列表 -->
 	<ul class="part1 list" style="margin-top: 20px;">
-		<li v-for="item in 5" :key="item">
+		<li v-for="(item,index) in data.pro || []" :key="index">
 			<img src="@/assets/photo/team.png" alt="" class="list-left">
 			<div class="list-right">
 				<div class="list-top">
 					<div class="list-top-left">
-						<p>直推<strong>1</strong>人</p>
-						<p>奖励<strong>10000</strong>元数字人民币</p>
+						<p>{{item.title}}</p>
+						<p>{{item.tip}}</p>
 					</div>
-					<button :class="{'active': item == 1}">领取</button>
+					<button :class="{'active': item.status == 1 && item.todayCount == item.num }" @click="getPrize(item)">领取</button>
 				</div>
 				<div class="list-bottom">
-					<p></p>
-					<span>1/5</span>
+					<p :style="{width: item.progress + '%'}"></p>
+					<span>{{item.todayCount}}/{{item.num}}</span>
 				</div>
 			</div>
 		</li>
@@ -198,7 +211,7 @@ export default {
   mounted() {
 	this.getConfig();
     this.getCode();
-	this.getPrize(1);
+	// this.getPrize(1);
 	this.getCC();
   },
   methods: {
@@ -262,23 +275,36 @@ export default {
 		this.$dialog({  message: this.showTips});
 	},
 	
-	getPrize(check) {
-	  getPrizeApi({"check":check}).then((res) => {
-		  if (check) {
-			  if (res.code == 0) {
-				  this.tips = res.msg;
-				  this.showTips = res.data.showTips;
-			  }
-		  } else {
-			 if (res.code == 200) {
-				 this.$refs.myLucky.play()
-			 	this.key = res.data.key;
-				this.award = res.data.award;
-			 	this.$refs.myLucky.stop(this.key)
-			 } else {
-			 	Toast(res.msg || '请重试')
-			 } 
-		  }
+	getPrize(item) {
+		// this.showTips = '1111'
+		// this.showTip();
+		if (item.status != 1) {
+			return;
+		}
+	  getPrizeApi({"num":item.num}).then((res) => {
+		if (res.code == 200) {
+			this.tips = res.msg;
+			this.showTips = res.data.showTips;
+			item.status = 0;
+		}
+		this.showTips = res.msg
+		this.showTip(); 
+		
+		//   if (check) {
+		// 	  if (res.code == 0) {
+		// 		  this.tips = res.msg;
+		// 		  this.showTips = res.data.showTips;
+		// 	  }
+		//   } else {
+		// 	 if (res.code == 200) {
+		// 		 this.$refs.myLucky.play()
+		// 	 	this.key = res.data.key;
+		// 		this.award = res.data.award;
+		// 	 	this.$refs.myLucky.stop(this.key)
+		// 	 } else {
+		// 	 	Toast(res.msg || '请重试')
+		// 	 } 
+		//   }
 	  });
 	},
 
@@ -291,8 +317,9 @@ export default {
 			}
 		});
 	},
-    handleCopyCode() {
-      this.$copyText(this.shareCode)
+    handleCopyCode(type) {
+	  const code = type == 'code' ? this.shareCode : this.shareLink;
+      this.$copyText(code)
         .then(() => {
           this.$vantToast("复制成功");
         })
@@ -544,7 +571,7 @@ export default {
 			flex-direction: column;
             border-radius: 7px;
             width: auto;
-            height: halfSize(64px);
+            // height: halfSize(64px);
             line-height: halfSize(64px);
             padding: 0px 5px;
             color: $font_color_dark;
@@ -570,11 +597,16 @@ export default {
 				strong {
 					width: 24px;
 					height: 24px;
-					background: #4B594A;
+					// background: #4B594A;
 					border-radius: 5px;
 					display: flex;
 					justify-content: center;
 					align-items: center;
+					flex-shrink: 0;
+					img {
+						width: 100%;
+						// height: 18px;
+					}
 				}
 			}
             

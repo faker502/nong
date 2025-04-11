@@ -44,8 +44,8 @@
 
                     <!--图片上传 end-->
                   </div>
-                  <div class="user-info" @click="$router.push('/lva')">
-                    <!-- <div class="level-info">
+                  <div class="user-info" >
+                    <!-- <div class="level-info">@click="$router.push('/lva')"
                       <div class="level-txt">{{ user.levelText }}</div>
                     </div> -->
                     <div class="username">{{ user.name }}</div>
@@ -158,7 +158,7 @@
 							<van-icon name="arrow" />
 						</p>
 						<h6>
-							<strong>9999.00</strong>
+							<strong>{{account.balanceTotal}}</strong>
 							<img src="@/assets/photo/sync.png" />
 						</h6>
 					</div>
@@ -170,7 +170,7 @@
 							<van-icon name="arrow" />
 						</p>
 						<h6>
-							<strong>9999.00</strong>
+							<strong>{{account.balance}}</strong>
 							<img src="@/assets/photo/sync.png" />
 						</h6>
 					</div>
@@ -178,11 +178,11 @@
 			</ul>
 			<div class="right item">
 				<p @click="$router.push('/my/fund-list')">
-					<span>数字人民币</span>
+					<span>强农基金</span>
 					<van-icon name="arrow" />
 				</p>
 				<h6>
-					<strong>9999.00</strong>
+					<strong>{{account.fund}}</strong>
 				</h6>
 			</div>
             <!-- <div class="detail-4">

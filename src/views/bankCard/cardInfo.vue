@@ -12,22 +12,24 @@
       </div>
 
       <div class="card-list" v-else>
-        <div class="card-item" v-for="(item, key) in list" :key="key" @click="tolink(item.type)">
+        <div class="card-item" v-for="(item, key) in list" :key="key" :class="{'bank-bg': item.type != 1}"> <!--@click="tolink(item.type)"-->
           <div class="card-info">
             <div class="card-icon">
               <svg-icon iconClass="alipay" v-if="item.type == 1" :size="28"/>
               <svg-icon iconClass="unionPay" v-else-if="item.type == 2" :size="28"/>
               <svg-icon iconClass="address" v-else :size="28"/>
             </div>
-            <div class="card-title">
-              {{ item.type == 1 ? '支付宝账户' : item.bankName }}
+            <!-- <div class="card-title">
+              {{ item.type == 1 ? '支付宝' : item.bankName }}
               <div v-if="item.type == 2" class="bank-branch">{{ getBankBranch(item) }}</div>
-            </div>
+            </div> -->
             <div class="card-name">{{ item.name }}</div>
             <div class="card-number">{{ formatCardNumber(item.number, item.type) }}</div>
           </div>
           <div class="edit-btn">
-            编辑 <van-icon name="arrow" />
+            <h6>{{ item.type == 1 ? '支付宝' : item.bankName }}</h6>
+            <p v-if="item.type == 2" class="bank-branch">{{ getBankBranch(item) }}</p>
+            <!-- 编辑 <van-icon name="arrow" /> -->
           </div>
         </div>
 
@@ -35,7 +37,7 @@
       </div>
     </div>
 
-    <div class="customer-service" @click="$router.push('/online')">
+    <div class="customer-service" @click="$router.push('/kefu')">
       <p class="service-text">
         账号遇到问题？
         <span class="highlight">人工客服</span>
@@ -183,21 +185,27 @@ export default {
 
     .card-list {
       .card-item {
-        padding: 24px;
+        padding: 16px;
         margin-bottom: 16px;
-        border-radius: 16px;
+        border-radius: 8px;
         position: relative;
         overflow: hidden;
-        
-        &:nth-child(1) {
-          background: #C23B22;
-          background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        background: url('@/assets/photo/ali_bg.png') no-repeat center center;
+        background-size: 100% 100%;
+        &.bank-bg {
+          background: url('@/assets/photo/bank_bg.png') no-repeat center center;
+          background-size: 100% 100%;
         }
         
-        &:nth-child(2) {
-          background: #4B7BF9;
-          background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-        }
+        // &:nth-child(1) {
+        //   background: #C23B22;
+        //   background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        // }
+        
+        // &:nth-child(2) {
+        //   background: #4B7BF9;
+        //   background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        // }
 
         .card-info {
           position: relative;
@@ -228,7 +236,7 @@ export default {
           }
 
           .card-name {
-            font-size: 20px;
+            font-size: 18px;
             color: #FFFFFF;
             margin-bottom: 12px;
             font-weight: 500;
@@ -238,18 +246,32 @@ export default {
             font-size: 24px;
             color: #FFFFFF;
             font-family: monospace;
+            font-weight: 500;
             letter-spacing: 2px;
           }
         }
 
         .edit-btn {
           position: absolute;
-          top: 24px;
-          right: 24px;
+          height: 48px;
+          top: 16px;
+          // right: 24px;
+          left: 75px;
           color: rgba(255, 255, 255, 0.9);
           font-size: 14px;
           display: flex;
-          align-items: center;
+          flex-direction: column;
+          // align-items: center;
+          justify-content: center;
+          // border: 1px solid blue;
+          font-size: 13px;
+          h6 {
+            font-size: 18px;
+            font-weight: 500;
+          }
+          p {
+            margin-top: 4px;
+          }
           
           .van-icon {
             margin-left: 4px;

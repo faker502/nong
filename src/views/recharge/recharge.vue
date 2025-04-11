@@ -10,7 +10,7 @@
     <div class="part_1">
       <div class="content-box">
         <p>账户余额(元)</p>
-        <p>1000.00</p>
+        <p>{{balance}}</p>
       </div>
     </div>
     <div class="part_2">
@@ -205,6 +205,7 @@
 import { mapGetters } from "vuex";
 import ListCellPay from "@/components/ListCellPay.vue";
 import { getConfigKey } from "@/api/index";
+import {  getAccountApi } from "@/api/member";
 import { payRequestApi, payRequestNoApi, getPayMoneyApi } from "@/api/recharge";
 export default {
   name: "recharge",
@@ -213,6 +214,7 @@ export default {
   },
   data() {
     return {
+      balance: 0,
       money: '',
       payList: {},
       payChannelList: [],
@@ -242,6 +244,12 @@ export default {
   mounted() {
     this.confingData();
     this.getPayList();
+    getAccountApi().then((res) => {
+        this.balance = res.data.account.balance;
+        // this.payConfig = res.data.payConfig;
+        // this.payPassword = res.data.user.payPassword;
+        
+      });
   },
   methods: {
     handleTab(it) {

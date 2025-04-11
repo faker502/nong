@@ -70,7 +70,7 @@
 				<span><strong>1000万</strong>名额</span>
 			</div>
 			<div class="content-top-bottom">
-				<h2></h2>
+				<h2 :style="{width: progress + '%'}"></h2>
 			</div>
 		 </section>
 
@@ -86,7 +86,7 @@
               <h1>
                 {{ item.name }}
               </h1>
-			  <h2>{{item.name}}</h2>
+			  <h2>{{item.note}}</h2>
               <img
                 :src="item.img"
                 
@@ -105,7 +105,7 @@
                     <!-- <img src="@/assets/photo/ms/t1.webp" style="height: 30px" /> -->
                   </div>
                   <div class="bottom">
-                    <strong>{{ item.title }}</strong>元
+                    <strong>{{ item.fund }}</strong>元
                   </div>
                 </div>
 
@@ -115,7 +115,7 @@
                     <!-- <img src="@/assets/photo/ms/t2.webp" style="height: 30px" /> -->
                   </div>
                   <div class="bottom">
-                    <strong>{{ item.daysIncome }}</strong>元
+                    <strong>{{ item.fund2 }}</strong>元
                   </div>
                 </div>
 
@@ -125,7 +125,7 @@
                     <!-- <img src="@/assets/photo/ms/t3.webp" style="height: 30px" /> -->
                   </div>
                   <div class="bottom">
-                    <strong>{{ item.daily }}</strong>天
+                    <strong>{{ item.assets }}</strong>人
                   </div>
                 </div>
 
@@ -165,7 +165,7 @@
                   ></div>
                 </div> -->
               </div>
-              <div class="bottom-btn">
+              <div class="bottom-btn" :class="{'disabled1': item.state != 1}" @click="buyProject(item.tip, item.id)">
 				立即购买
                 <!-- <div class="a-ccc">
                   <van-button
@@ -260,6 +260,7 @@ export default {
         { value: 1, title: "中国圆梦" },
         { value: 2, title: "我的助力" },
       ],
+      progress: 0,
       list: [],
       all: [],
       classId: 0,
@@ -300,6 +301,7 @@ export default {
 
     getProjectList() {
       getListApi({ type: 2 }).then((res) => {
+        this.progress = res.progress
         this.all = res.data;
         //this.fund = res.data[0].id;
         this.config = res.config;
@@ -993,7 +995,7 @@ export default {
 					margin-top: 10px;
 					strong {
 						font-weight: bold;
-						font-size: 20px;
+						font-size: 16px;
 						color: #313231;
 					}
 					color: #626571;
