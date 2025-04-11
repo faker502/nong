@@ -79,9 +79,9 @@
                 </van-checkbox>
               </div>
               <div class="home-item2">
-                <div @click="$router.push('/forget')">
+                <!-- <div @click="$router.push('/forget')">
                   忘记密码?
-                </div>
+                </div> -->
               </div>
             </div>
           </van-form>
@@ -112,7 +112,7 @@
           在线客服
         </div>
       </div> -->
-      <div class="customer-service" @click="$router.push('/online')">
+      <div class="customer-service" @click="$router.push('/kefu')">
       <p class="service-text">
         账号遇到问题？
         <span class="highlight">人工客服</span>

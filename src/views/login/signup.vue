@@ -210,7 +210,7 @@
 	  <!-- <div class="online df_r">
 	      <div class="" style="font-size:18px;" @click="$router.push('/online')">在线客服</div>
 	  </div> -->
-    <div class="customer-service" @click="$router.push('/online')">
+    <div class="customer-service" @click="$router.push('/kefu')">
       <p class="service-text">
         账号遇到问题？
         <span class="highlight">人工客服</span>

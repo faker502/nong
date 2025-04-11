@@ -25,7 +25,7 @@
       </van-cell-group>
     </div>
 
-    <div class="customer-service" @click="$router.push('/online')">
+    <div class="customer-service" @click="$router.push('/kefu')">
       <p class="service-text">
         账号遇到问题？
         <span class="highlight">人工客服</span>

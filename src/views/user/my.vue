@@ -314,7 +314,7 @@
             ></van-button> -->
 
 			<van-button
-              url="/online"
+              url="/kefu"
               :icon="require('@/assets/img/my/menu2/kf.png')"
               type="primary"
               >联系客服<span class="im"
