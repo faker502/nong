@@ -37,8 +37,8 @@
       </div>
 
       <div class="container df_c">
-        <!--marquee start -->
-        <div class="marquee" v-show="notice">
+        <!--marquee start  v-show="notice"-->
+        <div class="marquee" :style="{visibility: notice ? 'visible' : 'hidden'}">
           <div class="">
             <van-notice-bar
               scrollable
@@ -100,7 +100,7 @@
 <script>
 import { mapGetters } from "vuex";
 import VueQr from "vue-qr";
-import { getCodeApi1, getPrizeApi } from "@/api/member.js";
+import { getCodeApi1, getPrizeApi1 as getPrizeApi } from "@/api/member.js";
 import { getConfigKey } from "@/api/index";
 import { Toast } from "vant";
 export default {

@@ -552,6 +552,7 @@ export default {
     background: url("@/assets/photo/top-bg.png") top left no-repeat;
     //background-color: #a9ae8a;
     // background-size: 100% 240px;
+    background-size: 100%;
     text-align: center;
 
     .user-logo {

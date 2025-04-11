@@ -44,8 +44,8 @@
                 :key="key"
                 :title="item.noticeTitle"
                 :name="key">
-                <div class="question-content">
-                    {{ item.noticeContent }}
+                <div class="question-content" v-html="item.noticeContent">
+                   
                 </div>
             </van-collapse-item>
         </van-collapse>

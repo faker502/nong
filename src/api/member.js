@@ -225,6 +225,16 @@ export function getCodeApi1(data = {}) {
     data: data
   })
 }
+
+
+export function getPrizeApi1(data = {}) {
+  return request({
+    url: '/home/member/prize', // '',
+    method: 'post',
+    data: data
+  })
+}
+
 export function getPrizeApi(data = {}) {
   return request({
     url: '/home/project/getAward', // '/home/member/prize',

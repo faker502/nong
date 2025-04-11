@@ -881,6 +881,9 @@ export default {
 <style lang="scss" scoped>
 .test-page {
 	padding-bottom: 50px;
+  ::v-deep .van-dialog__cancel{
+    background: #fff!important;
+  }
   .active-pop {
     height: 100%;
     margin: 0 auto;
@@ -1808,7 +1811,8 @@ export default {
         display: inline-block;
         width: 45%;
         border: 1px solid #cb2d27;
-        background: linear-gradient(91.27deg, #e7514c 0%, #cb2d27 100%);
+        // background: linear-gradient(91.27deg, #e7514c 0%, #cb2d27 100%);
+        background: none!important;
         color: #ffffff;
         width: 38%;
         margin: 0 auto;
@@ -1890,6 +1894,12 @@ export default {
       margin: 0 auto;
     //   height: 46px;
       border-radius: 8px;
+      &.van-dialog__cancel {
+        // background: #fff!important;
+        .van-button__text {
+          background: #fff!important;
+        }
+      }
     //   border-bottom: 1px solid #f0f3dc !important;
       .van-button__text {
         color: #4B594A;
@@ -1937,6 +1947,10 @@ export default {
   }
   ::v-deep .van-dialog__cancel {
     display: inline-block !important;
+    // background: #fff!important;
+    .van-button__text {
+      background: transparent!important;
+    }
   }
 
   ::v-deep .van-hairline--top {
